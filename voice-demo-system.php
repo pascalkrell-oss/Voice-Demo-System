@@ -891,21 +891,18 @@ public function enqueue_assets() {
     <div class="vdemo-standalone-player">
         <div class="vdemo-standalone-header">
             <div class="vdemo-standalone-header-left">
-                <?php if (!empty($badge) || !empty($info_parts)) : ?>
-                    <div class="vdemo-standalone-meta">
-                        <?php if (!empty($badge)) : ?>
-                            <span class="vdemo-badge vdemo-badge-inline"><?php echo esc_html($badge); ?></span>
-                        <?php endif; ?>
-                        <?php if (!empty($info_parts)) : ?>
-                            <button type="button" class="vdemo-subline-info-badge vdemo-subline-info-badge-small" aria-label="Eigenschaften anzeigen">
-                                <span class="vdemo-subline-info-tooltip">
-                                    <?php foreach ($info_parts as $part) : ?>
-                                        <span class="vdemo-subline-chip"><?php echo esc_html($part); ?></span>
-                                    <?php endforeach; ?>
-                                </span>
-                            </button>
-                        <?php endif; ?>
-                    </div>
+                <?php if (!empty($badge)) : ?>
+                    <span class="vdemo-badge vdemo-badge-inline"><?php echo esc_html($badge); ?></span>
+                <?php endif; ?>
+                <span class="vdemo-standalone-audio-title"><?php echo esc_html($title); ?></span>
+                <?php if (!empty($info_parts)) : ?>
+                    <button type="button" class="vdemo-subline-info-badge vdemo-subline-info-badge-small" aria-label="Eigenschaften anzeigen">
+                        <span class="vdemo-subline-info-tooltip">
+                            <?php foreach ($info_parts as $part) : ?>
+                                <span class="vdemo-subline-chip"><?php echo esc_html($part); ?></span>
+                            <?php endforeach; ?>
+                        </span>
+                    </button>
                 <?php endif; ?>
                 <span class="vdemo-standalone-audio-title"><?php echo esc_html($title); ?></span>
             </div>

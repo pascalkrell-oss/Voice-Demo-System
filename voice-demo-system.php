@@ -491,16 +491,16 @@ public function enqueue_assets() {
         ob_start();
         ?>
         <div class="vdemo-wrapper" id="vdemo-wrapper">
-
-            <div class="vdemo-filter-shell">
-                <div class="vdemo-filter-meta-top">
-                    <span class="vdemo-result-label">
-                        <span id="vdemo-result-count"><?php echo esc_html(count($items)); ?></span> Treffer
-                    </span>
-                    <button class="vdemo-reset-button" id="vdemo-reset-button" type="button">
-                        Filter zurücksetzen
-                    </button>
-                </div>
+            <form id="voice-demo-filter-form" class="vdemo-filter-form" action="#" method="post">
+                <div class="vdemo-filter-shell">
+                    <div class="vdemo-filter-meta-top">
+                        <span class="vdemo-result-label">
+                            <span id="vdemo-result-count"><?php echo esc_html(count($items)); ?></span> Treffer
+                        </span>
+                        <button class="vdemo-reset-button" id="vdemo-reset-button" type="button">
+                            Filter zurücksetzen
+                        </button>
+                    </div>
 
                 <div class="vdemo-filter-bar">
                     <div class="vdemo-filter-row-main">
@@ -596,6 +596,7 @@ public function enqueue_assets() {
                     </div>
                 </div>
             </div>
+            </form>
 
             <div class="vdemo-active-filters vdemo-active-filters-empty" id="vdemo-active-filters">
                 <span class="vdemo-active-filters-title">Ausgewählte Filter</span>

@@ -763,7 +763,7 @@ public function enqueue_assets() {
                     <div class="vdemo-drawer-footer-inner">
                         <div class="vdemo-drawer-footer-buttons">
                             <button type="button" class="vdemo-drawer-btn vdemo-drawer-btn-primary" id="vdemo-drawer-add">
-                                Zur Anfrage hinzufügen
+                                ANFRAGE hinzufügen
                             </button>
                             <button type="button" class="vdemo-drawer-btn vdemo-drawer-btn-ghost" id="vdemo-drawer-share">
                                 Merkliste teilen
@@ -1010,7 +1010,7 @@ public function add_shortcode_column($columns) {
                             <div class="vdemo-drawer-footer-inner">
                                 <div class="vdemo-drawer-footer-buttons">
                                     <button type="button" class="vdemo-drawer-btn vdemo-drawer-btn-primary" id="vdemo-drawer-add">
-                                        Zur Anfrage hinzufügen
+                                        ANFRAGE hinzufügen
                                     </button>
                                     <button type="button" class="vdemo-drawer-btn vdemo-drawer-btn-ghost" id="vdemo-drawer-share">
                                         Merkliste teilen

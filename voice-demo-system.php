@@ -494,12 +494,14 @@ public function enqueue_assets() {
             <form id="voice-demo-filter-form" class="vdemo-filter-form" action="#" method="post">
                 <div class="vdemo-filter-shell">
                     <div class="vdemo-filter-meta-top">
-                        <span class="vdemo-result-label">
-                            <span id="vdemo-result-count"><?php echo esc_html(count($items)); ?></span> Treffer
-                        </span>
-                        <button class="vdemo-reset-button" id="vdemo-reset-button" type="button">
-                            Filter zurücksetzen
-                        </button>
+                        <div class="vdemo-filter-meta-actions">
+                            <span class="vdemo-result-label">
+                                <span id="vdemo-result-count"><?php echo esc_html(count($items)); ?></span> Treffer
+                            </span>
+                            <button class="vdemo-reset-button" id="vdemo-reset-button" type="button">
+                                Filter zurücksetzen
+                            </button>
+                        </div>
                     </div>
 
                 <div class="vdemo-filter-bar">
@@ -729,6 +731,11 @@ public function enqueue_assets() {
                                     data-demo-audio="<?php echo esc_url($item['audio_url']); ?>"
                                     data-demo-badge="<?php echo esc_attr($item['badge']); ?>"
                                 >
+                                    <span class="vdemo-memo-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" class="vdemo-icon-svg" focusable="false">
+                                            <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14.5a.5.5 0 0 1-.79.407L12 15.5l-5.21 3.407A.5.5 0 0 1 6 18.5V4zm2 0h8v11.382l-4.21-2.75a1 1 0 0 0-1.08 0L8 15.382V4z" />
+                                        </svg>
+                                    </span>
                                     <span class="vdemo-memo-label">Auf die Merkliste</span>
                                 </button>
                             </div>

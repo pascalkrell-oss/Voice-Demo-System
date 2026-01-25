@@ -1256,28 +1256,28 @@
 /* Standalone Player */
 
 .vdemo-standalone-player {
-    max-width: 600px;
+    max-width: 520px;
     margin: 0 auto;
-    padding: 1.8rem 2rem;
-    border-radius: 24px;
+    padding: 1.1rem 1.25rem;
+    border-radius: 18px;
     border: 1px solid #e2e8f0;
     background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
-    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.14);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
 }
 
 .vdemo-standalone-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .vdemo-standalone-header-left {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    gap: 0.45rem;
+    gap: 0.3rem;
     min-width: 0;
 }
 
@@ -1292,7 +1292,7 @@
 }
 
 .vdemo-standalone-audio-title {
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 700;
     color: #0b1220;
     overflow: hidden;
@@ -1303,18 +1303,18 @@
 .vdemo-standalone-badge-row {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.35rem;
 }
 
 .vdemo-standalone-title-row {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
     min-width: 0;
 }
 
 .vdemo-standalone-subline {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     color: #64748b;
     line-height: 1.4;
     max-width: 100%;
@@ -1327,26 +1327,26 @@
 .vdemo-standalone-header-right {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
 }
 
 .vdemo-standalone-actions {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    margin-left: 0.35rem;
+    gap: 0.25rem;
+    margin-left: 0.2rem;
 }
 
 .vdemo-standalone-actions .vdemo-download-mini,
 .vdemo-standalone-actions .vdemo-memo-mini {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     box-shadow: none;
 }
 
 .vdemo-download-mini {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     border-radius: 999px;
     border: 1px solid #e2e8f0;
     background: #f1f5f9;
@@ -1365,8 +1365,8 @@
 }
 
 .vdemo-memo-mini {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     border-radius: 999px;
     border: 1px solid #e2e8f0;
     background: #f1f5f9;
@@ -1388,8 +1388,8 @@
 
 .vdemo-download-mini svg,
 .vdemo-memo-mini svg {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     fill: currentColor;
 }
 
@@ -1424,15 +1424,19 @@
 }
 
 .vdemo-card-audio-standalone {
-    margin-top: 1.1rem;
-    padding: 0.75rem 1rem;
-    border-radius: 16px;
+    margin-top: 0.75rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 12px;
     border: 1px solid #e5eaf3;
     background: #ffffff;
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
 }
 
 /* Pagination, Drawer, Standalone etc. */
+
+.vdemo-card-filter-hidden {
+    display: none;
+}
 
 .vdemo-card-page-hidden {
     display: none;

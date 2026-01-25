@@ -703,12 +703,12 @@ public function enqueue_assets() {
                                     <span class="vdemo-play-icon-play"></span>
                                     <span class="vdemo-play-icon-pause"></span>
                                 </button>
+                                <span class="vdemo-time-label">0:00</span>
                                 <div class="vdemo-progress-wrapper">
                                     <div class="vdemo-progress-track">
                                         <div class="vdemo-progress-fill"></div>
                                     </div>
                                 </div>
-                                <span class="vdemo-time-label">0:00</span>
                                 <?php if (!empty($item['audio_url'])) : ?>
                                     <audio class="vdemo-audio" src="<?php echo esc_url($item['audio_url']); ?>" preload="none"></audio>
                                 <?php endif; ?>
@@ -891,19 +891,23 @@ public function enqueue_assets() {
     <div class="vdemo-standalone-player">
         <div class="vdemo-standalone-header">
             <div class="vdemo-standalone-header-left">
-                <?php if (!empty($badge)) : ?>
-                    <span class="vdemo-badge vdemo-badge-inline"><?php echo esc_html($badge); ?></span>
+                <?php if (!empty($badge) || !empty($info_parts)) : ?>
+                    <div class="vdemo-standalone-meta">
+                        <?php if (!empty($badge)) : ?>
+                            <span class="vdemo-badge vdemo-badge-inline"><?php echo esc_html($badge); ?></span>
+                        <?php endif; ?>
+                        <?php if (!empty($info_parts)) : ?>
+                            <button type="button" class="vdemo-subline-info-badge vdemo-subline-info-badge-small" aria-label="Eigenschaften anzeigen">
+                                <span class="vdemo-subline-info-tooltip">
+                                    <?php foreach ($info_parts as $part) : ?>
+                                        <span class="vdemo-subline-chip"><?php echo esc_html($part); ?></span>
+                                    <?php endforeach; ?>
+                                </span>
+                            </button>
+                        <?php endif; ?>
+                    </div>
                 <?php endif; ?>
                 <span class="vdemo-standalone-audio-title"><?php echo esc_html($title); ?></span>
-                <?php if (!empty($info_parts)) : ?>
-                    <button type="button" class="vdemo-subline-info-badge vdemo-subline-info-badge-small" aria-label="Eigenschaften anzeigen">
-                        <span class="vdemo-subline-info-tooltip">
-                            <?php foreach ($info_parts as $part) : ?>
-                                <span class="vdemo-subline-chip"><?php echo esc_html($part); ?></span>
-                            <?php endforeach; ?>
-                        </span>
-                    </button>
-                <?php endif; ?>
             </div>
         </div>
 
@@ -913,13 +917,13 @@ public function enqueue_assets() {
                 <span class="vdemo-play-icon-pause"></span>
             </button>
 
+            <span class="vdemo-time-label">0:00</span>
             <div class="vdemo-progress-wrapper">
                 <div class="vdemo-progress-track">
                     <div class="vdemo-progress-fill"></div>
                 </div>
             </div>
 
-            <span class="vdemo-time-label">0:00</span>
             <div class="vdemo-standalone-actions">
                 <?php if (!empty($audio_url)) : ?>
                     <a class="vdemo-download-mini" href="<?php echo esc_url($audio_url); ?>" download>

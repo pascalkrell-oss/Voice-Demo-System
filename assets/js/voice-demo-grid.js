@@ -1,204 +1,97 @@
 /* Voice Demo System – Filter, Player, Merkliste, Drawer, aktive Filter + Custom-Dropdowns + Standalone */
-document.addEventListener("DOMContentLoaded", function () {
-    var wrapper = document.getElementById("vdemo-wrapper");
-    var hasStandalone = document.querySelector(".vdemo-standalone-player");
-    var hasDrawerOnly = document.getElementById("vdemo-drawer");
+document.addEventListener("DOMContentLoaded", () => {
+    const wrapper = document.getElementById("vdemo-wrapper");
+    const hasStandalone = document.querySelector(".vdemo-standalone-player");
+    const hasDrawerOnly = document.getElementById("vdemo-drawer");
 
     if (!wrapper && !hasStandalone && !hasDrawerOnly) {
         return;
     }
 
-    var grid = document.getElementById("vdemo-grid");
-    var cards = grid ? Array.prototype.slice.call(grid.querySelectorAll(".vdemo-card")) : [];
-    var pageSize = 9;
-    var currentPage = 1;
-    var currentPageCards = cards.slice();
-    var paginationNav = null;
+    const grid = document.getElementById("vdemo-grid");
+    const cards = grid ? Array.from(grid.querySelectorAll(".vdemo-card")) : [];
+    const pageSize = 9;
+    let currentPage = 1;
+    let currentPageCards = cards.slice();
+    let paginationNav = null;
 
-    
-    
-    function changePageWithFade(targetPage, totalPages) {
-        if (!grid) return;
-        if (typeof targetPage !== "number" || isNaN(targetPage)) {
-            return;
-        }
-        if (targetPage < 1 || targetPage > totalPages) {
-            return;
-        }
-        if (currentPage === targetPage) {
-            return;
-        }
+    const filterSelects = document.querySelectorAll(".vdemo-select");
+    const resetButton = document.getElementById("vdemo-reset-button");
+    const resultCount = document.getElementById("vdemo-result-count");
 
-        grid.classList.remove("vdemo-grid-fade-in");
-        grid.classList.add("vdemo-grid-fade-out");
+    const activeFilterBar = document.getElementById("vdemo-active-filters");
+    const activeFilterChips = document.getElementById("vdemo-active-filters-chips");
 
-        window.setTimeout(function () {
-            currentPage = targetPage;
-            applyPagination();
-            grid.classList.remove("vdemo-grid-fade-out");
-            grid.classList.add("vdemo-grid-fade-in");
+    const drawer = document.getElementById("vdemo-drawer");
+    const drawerToggle = document.getElementById("vdemo-drawer-toggle");
+    const drawerClose = document.getElementById("vdemo-drawer-close");
+    const drawerClear = document.getElementById("vdemo-drawer-clear");
+    const drawerList = document.getElementById("vdemo-drawer-list");
+    const drawerCount = document.getElementById("vdemo-drawer-count");
+    const drawerAdd = document.getElementById("vdemo-drawer-add");
+    const drawerShare = document.getElementById("vdemo-drawer-share");
 
-            var anchor = document.getElementById("Demo-Grid-start") || grid || document.getElementById("vdemo-grid");
-            if (anchor && typeof anchor.scrollIntoView === "function") {
-                anchor.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-            }
-        }, 160);
-    }
+    let memoButtons = document.querySelectorAll(".vdemo-memo-button");
+    let memoItems = {};
+    const storageKey = "vdemo_memos";
 
-function renderPagination() {
-        if (!grid) return;
+    let currentAudio = null;
+    let currentAudioBlock = null;
 
-        var allVisible = currentPageCards && currentPageCards.length ? currentPageCards : cards.slice();
-        var total = allVisible.length;
-        var totalPages = Math.max(1, Math.ceil(total / pageSize));
+    let dropdownConfigs = [];
+    let prevMemoCount = 0;
 
-        // Existierende Navigation entfernen
-        if (paginationNav && paginationNav.parentNode) {
-            paginationNav.parentNode.removeChild(paginationNav);
-        }
-
-        if (totalPages <= 1) {
-            paginationNav = null;
-            cards.forEach(function (card) {
-                card.classList.remove("vdemo-card-page-hidden");
-            });
-            return;
-        }
-
-        paginationNav = document.createElement("nav");
-        paginationNav.className = "vdemo-pagination";
-        paginationNav.setAttribute("aria-label", "Demos");
-
-        
-        for (var i = 1; i <= totalPages; i++) {
-            (function (pageNum) {
-                var link = document.createElement("button");
-                link.type = "button";
-                link.className = "vdemo-page-link";
-                if (pageNum === currentPage) {
-                    link.classList.add("vdemo-page-link-active");
-                    link.textContent = String(pageNum);
-                } else {
-                    link.textContent = String(pageNum);
-                }
-                link.addEventListener("click", function () {
-                    changePageWithFade(pageNum, totalPages);
-                });
-                paginationNav.appendChild(link);
-            })(i);
-        }
-
-var afterNode = grid;
-        if (afterNode && afterNode.parentNode) {
-            afterNode.parentNode.insertBefore(paginationNav, afterNode.nextSibling);
-        }
-    }
-
-    function applyPagination() {
-        if (!grid) return;
-
-        var allVisible = currentPageCards && currentPageCards.length ? currentPageCards : cards.filter(function (c) {
-            return !c.classList.contains("vdemo-card-filter-hidden");
-        });
-
-        var total = allVisible.length;
-        var totalPages = Math.max(1, Math.ceil(total / pageSize));
-        if (currentPage > totalPages) {
-            currentPage = totalPages;
-        }
-        var start = (currentPage - 1) * pageSize;
-        var end = start + pageSize;
-
-        cards.forEach(function (card) {
-            card.classList.add("vdemo-card-page-hidden");
-        });
-
-        allVisible.slice(start, end).forEach(function (card) {
-            card.classList.remove("vdemo-card-page-hidden");
-        });
-
-        renderPagination();
-        bindMemoButtonsClicks();
-        if (typeof syncMemoButtons === "function") {
-            syncMemoButtons();
-        }
-    }
-var filterSelects = document.querySelectorAll(".vdemo-select");
-    var resetButton = document.getElementById("vdemo-reset-button");
-    var resultCount = document.getElementById("vdemo-result-count");
-
-    var activeFilterBar = document.getElementById("vdemo-active-filters");
-    var activeFilterChips = document.getElementById("vdemo-active-filters-chips");
-
-    var drawer = document.getElementById("vdemo-drawer");
-    var drawerToggle = document.getElementById("vdemo-drawer-toggle");
-    var drawerClose = document.getElementById("vdemo-drawer-close");
-    var drawerClear = document.getElementById("vdemo-drawer-clear");
-    var drawerList = document.getElementById("vdemo-drawer-list");
-    var drawerCount = document.getElementById("vdemo-drawer-count");
-    var drawerAdd = document.getElementById("vdemo-drawer-add");
-    var drawerShare = document.getElementById("vdemo-drawer-share");
-
-    var memoButtons = document.querySelectorAll(".vdemo-memo-button");
-    var memoItems = {};
-    var storageKey = "vdemo_memos";
-
-    var currentAudio = null;
-    var currentAudioBlock = null;
-
-    var dropdownConfigs = [];
-    var prevMemoCount = 0;
-
-    var filterLabelMap = {
+    const filterLabelMap = {
         genre: "Genre",
         style: "Stil",
         mood: "Stimmung",
         speed: "Tempo",
         pitch: "Tonhöhe",
-        industry: "Branche"
+        industry: "Branche",
     };
 
-    function loadMemosFromStorage() {
+    const loadMemosFromStorage = () => {
         try {
-            var raw = window.localStorage.getItem(storageKey);
+            const raw = window.localStorage.getItem(storageKey);
             if (!raw) {
                 return;
             }
-            var data = JSON.parse(raw);
+            const data = JSON.parse(raw);
             if (data && typeof data === "object") {
                 memoItems = data;
             }
-        } catch (_e) {
+        } catch (error) {
             memoItems = {};
         }
-    }
+    };
 
-    function saveMemosToStorage() {
+    const saveMemosToStorage = () => {
         try {
             window.localStorage.setItem(storageKey, JSON.stringify(memoItems));
-        } catch (_e) {}
-    }
-
-    function formatTime(seconds) {
-        var s = Number(seconds);
-        if (!isFinite(s) || s < 0) {
-            s = 0;
+        } catch (error) {
+            // Ignorieren.
         }
-        var m = Math.floor(s / 60);
-        var n = Math.floor(s % 60);
-        var nn = n < 10 ? "0" + n : String(n);
-        return m + ":" + nn;
-    }
+    };
 
-    function resetAudioUI(block) {
-        if (!block) return;
-        var audio = block.querySelector(".vdemo-audio");
-        var playBtn = block.querySelector(".vdemo-play-button");
-        var fill = block.querySelector(".vdemo-progress-fill");
-        var timeLabel = block.querySelector(".vdemo-time-label");
+    const formatTime = (seconds) => {
+        let value = Number(seconds);
+        if (!Number.isFinite(value) || value < 0) {
+            value = 0;
+        }
+        const minutes = Math.floor(value / 60);
+        const rest = Math.floor(value % 60);
+        const padded = rest < 10 ? `0${rest}` : String(rest);
+        return `${minutes}:${padded}`;
+    };
+
+    const resetAudioUI = (block) => {
+        if (!block) {
+            return;
+        }
+        const audio = block.querySelector(".vdemo-audio");
+        const playBtn = block.querySelector(".vdemo-play-button");
+        const fill = block.querySelector(".vdemo-progress-fill");
+        const timeLabel = block.querySelector(".vdemo-time-label");
 
         if (audio) {
             audio.currentTime = 0;
@@ -213,21 +106,23 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
         if (timeLabel) {
             timeLabel.textContent = "0:00";
         }
-    }
+    };
 
-    function wireAudioContainers(root) {
-        if (!root) return;
+    const wireAudioContainers = (root) => {
+        if (!root) {
+            return;
+        }
 
-        var blocks = root.querySelectorAll(".vdemo-card-audio, .vdemo-drawer-audio");
-        blocks.forEach(function (block) {
+        const blocks = root.querySelectorAll(".vdemo-card-audio, .vdemo-drawer-audio");
+        blocks.forEach((block) => {
             if (block.getAttribute("data-vdemo-bound") === "1") {
                 return;
             }
-            var audio = block.querySelector(".vdemo-audio");
-            var playBtn = block.querySelector(".vdemo-play-button");
-            var progressTrack = block.querySelector(".vdemo-progress-track");
-            var progressFill = block.querySelector(".vdemo-progress-fill");
-            var timeLabel = block.querySelector(".vdemo-time-label");
+            const audio = block.querySelector(".vdemo-audio");
+            const playBtn = block.querySelector(".vdemo-play-button");
+            const progressTrack = block.querySelector(".vdemo-progress-track");
+            const progressFill = block.querySelector(".vdemo-progress-fill");
+            const timeLabel = block.querySelector(".vdemo-time-label");
 
             if (!audio || !playBtn || !timeLabel) {
                 return;
@@ -235,8 +130,10 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
 
             block.setAttribute("data-vdemo-bound", "1");
 
-            playBtn.addEventListener("click", function () {
-                if (!audio.src) return;
+            playBtn.addEventListener("click", () => {
+                if (!audio.src) {
+                    return;
+                }
 
                 if (currentAudio && currentAudio !== audio) {
                     resetAudioUI(currentAudioBlock);
@@ -253,16 +150,16 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
                 }
             });
 
-            audio.addEventListener("timeupdate", function () {
-                if (isFinite(audio.duration) && audio.duration > 0 && progressFill && progressTrack) {
-                    var ratio = audio.currentTime / audio.duration;
+            audio.addEventListener("timeupdate", () => {
+                if (Number.isFinite(audio.duration) && audio.duration > 0 && progressFill && progressTrack) {
+                    let ratio = audio.currentTime / audio.duration;
                     ratio = Math.max(0, Math.min(1, ratio));
-                    progressFill.style.width = String(ratio * 100) + "%";
+                    progressFill.style.width = `${ratio * 100}%`;
                 }
                 timeLabel.textContent = formatTime(audio.currentTime);
             });
 
-            audio.addEventListener("ended", function () {
+            audio.addEventListener("ended", () => {
                 resetAudioUI(block);
                 if (currentAudio === audio) {
                     currentAudio = null;
@@ -271,23 +168,25 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
             });
 
             if (progressTrack && progressFill) {
-                progressTrack.addEventListener("click", function (event) {
-                    var rect = progressTrack.getBoundingClientRect();
-                    var x = event.clientX - rect.left;
-                    var ratio = x / rect.width;
+                progressTrack.addEventListener("click", (event) => {
+                    const rect = progressTrack.getBoundingClientRect();
+                    const x = event.clientX - rect.left;
+                    let ratio = x / rect.width;
                     ratio = Math.max(0, Math.min(1, ratio));
-                    if (isFinite(audio.duration) && audio.duration > 0) {
+                    if (Number.isFinite(audio.duration) && audio.duration > 0) {
                         audio.currentTime = audio.duration * ratio;
                     }
                 });
             }
         });
-    }
+    };
 
-    function updateMultiToggleLabel(select, toggle) {
-        var labels = [];
-        Array.prototype.forEach.call(select.options, function (opt) {
-            if (!opt.selected || !opt.value || opt.value === "all") return;
+    const updateMultiToggleLabel = (select, toggle) => {
+        const labels = [];
+        Array.from(select.options).forEach((opt) => {
+            if (!opt.selected || !opt.value || opt.value === "all") {
+                return;
+            }
             labels.push(opt.textContent);
         });
 
@@ -296,85 +195,87 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
         } else if (labels.length === 1) {
             toggle.textContent = labels[0];
         } else {
-            toggle.textContent = labels[0] + " +" + (labels.length - 1);
+            toggle.textContent = `${labels[0]} +${labels.length - 1}`;
         }
-    }
+    };
 
-    function updateSingleToggleLabel(select, toggle) {
-        var opt = select.options[select.selectedIndex];
+    const updateSingleToggleLabel = (select, toggle) => {
+        const opt = select.options[select.selectedIndex];
         if (!opt || !opt.value || opt.value === "all") {
             toggle.textContent = "Alle";
         } else {
             toggle.textContent = opt.textContent;
         }
-    }
+    };
 
-    function closeAllDropdownMenus() {
-        dropdownConfigs.forEach(function (cfg) {
+    const closeAllDropdownMenus = () => {
+        dropdownConfigs.forEach((cfg) => {
             cfg.wrapper.classList.remove("vdemo-multi-open");
         });
-    }
+    };
 
-    function initDropdownUI() {
+    const initDropdownUI = () => {
         dropdownConfigs = [];
 
-        filterSelects.forEach(function (sel) {
-            var parent = sel.parentNode;
-            if (!parent || !parent.classList.contains("vdemo-select-wrapper")) return;
+        filterSelects.forEach((sel) => {
+            const parent = sel.parentNode;
+            if (!parent || !parent.classList.contains("vdemo-select-wrapper")) {
+                return;
+            }
 
-            var isMulti = !!sel.multiple;
+            const isMulti = !!sel.multiple;
             parent.classList.add("vdemo-select-wrapper-advanced");
 
-            var wrapper = document.createElement("div");
+            const wrapper = document.createElement("div");
             wrapper.className = "vdemo-multi";
 
-            var toggle = document.createElement("button");
+            const toggle = document.createElement("button");
             toggle.type = "button";
             toggle.className = "vdemo-multi-toggle";
             toggle.textContent = "Alle";
 
-            var menu = document.createElement("div");
+            const menu = document.createElement("div");
             menu.className = "vdemo-multi-menu";
 
-            Array.prototype.forEach.call(sel.options, function (opt) {
-                var value = opt.value;
-                var text = opt.textContent;
+            Array.from(sel.options).forEach((opt) => {
+                const { value } = opt;
+                const text = opt.textContent;
 
                 if (isMulti) {
-                    if (!value || value === "all") return;
+                    if (!value || value === "all") {
+                        return;
+                    }
 
-                    var row = document.createElement("label");
+                    const row = document.createElement("label");
                     row.className = "vdemo-multi-option";
                     row.setAttribute("data-value", value);
 
-                    var cb = document.createElement("input");
-                    cb.type = "checkbox";
-                    cb.className = "vdemo-multi-checkbox";
-                    cb.value = value;
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.className = "vdemo-multi-checkbox";
+                    checkbox.value = value;
 
-                    var span = document.createElement("span");
+                    const span = document.createElement("span");
                     span.textContent = text;
 
-                    row.appendChild(cb);
+                    row.appendChild(checkbox);
                     row.appendChild(span);
                     menu.appendChild(row);
 
-                    cb.addEventListener("change", function () {
-                        var val = cb.value;
-                        Array.prototype.forEach.call(sel.options, function (o) {
-                            if (o.value === val) {
-                                o.selected = cb.checked;
+                    checkbox.addEventListener("change", () => {
+                        const val = checkbox.value;
+                        Array.from(sel.options).forEach((option) => {
+                            if (option.value === val) {
+                                option.selected = checkbox.checked;
                             }
                         });
 
-                        var anySelected = Array.prototype.some.call(sel.options, function (o) {
-                            return o.value !== "all" && o.selected;
-                        });
-                        var allOpt = sel.querySelector('option[value="all"]');
+                        const anySelected = Array.from(sel.options).some((option) => option.value !== "all" && option.selected);
+                        const allOpt = sel.querySelector('option[value="all"]');
                         if (allOpt) {
                             if (!anySelected) {
-                                Array.prototype.forEach.call(sel.options, function (o) {
-                                    o.selected = false;
+                                Array.from(sel.options).forEach((option) => {
+                                    option.selected = false;
                                 });
                                 allOpt.selected = true;
                             } else {
@@ -386,14 +287,14 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
                         applyFilters();
                     });
                 } else {
-                    var btn = document.createElement("button");
+                    const btn = document.createElement("button");
                     btn.type = "button";
                     btn.className = "vdemo-single-option";
                     btn.textContent = text;
                     btn.setAttribute("data-value", value);
 
-                    btn.addEventListener("click", function (e) {
-                        e.stopPropagation();
+                    btn.addEventListener("click", (event) => {
+                        event.stopPropagation();
                         sel.value = value;
                         closeAllDropdownMenus();
                         updateSingleToggleLabel(sel, toggle);
@@ -411,74 +312,72 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
             wrapper.appendChild(menu);
             wrapper.appendChild(sel);
 
-            toggle.addEventListener("click", function (e) {
-                e.stopPropagation();
-                var isOpen = wrapper.classList.contains("vdemo-multi-open");
+            toggle.addEventListener("click", (event) => {
+                event.stopPropagation();
+                const isOpen = wrapper.classList.contains("vdemo-multi-open");
                 closeAllDropdownMenus();
                 if (!isOpen) {
                     wrapper.classList.add("vdemo-multi-open");
                 }
             });
 
-            menu.addEventListener("click", function (e) {
-                e.stopPropagation();
+            menu.addEventListener("click", (event) => {
+                event.stopPropagation();
             });
 
             dropdownConfigs.push({
                 select: sel,
-                wrapper: wrapper,
-                toggle: toggle,
-                menu: menu,
-                isMulti: isMulti
+                wrapper,
+                toggle,
+                menu,
+                isMulti,
             });
         });
 
-        document.addEventListener("click", function () {
+        document.addEventListener("click", () => {
             closeAllDropdownMenus();
         });
-    }
+    };
 
-    function syncDropdownUIFromSelects() {
-        dropdownConfigs.forEach(function (cfg) {
-            var sel = cfg.select;
-            var toggle = cfg.toggle;
-            var menu = cfg.menu;
-
-            if (cfg.isMulti) {
-                updateMultiToggleLabel(sel, toggle);
-                var checkboxes = menu.querySelectorAll(".vdemo-multi-checkbox");
-                checkboxes.forEach(function (cb) {
-                    var val = cb.value;
-                    var found = null;
-                    Array.prototype.forEach.call(sel.options, function (o) {
-                        if (o.value === val) {
-                            found = o;
-                        }
-                    });
-                    cb.checked = !!(found && found.selected);
+    const syncDropdownUIFromSelects = () => {
+        dropdownConfigs.forEach((cfg) => {
+            const { select, toggle, menu, isMulti } = cfg;
+            if (isMulti) {
+                updateMultiToggleLabel(select, toggle);
+                const checkboxes = menu.querySelectorAll(".vdemo-multi-checkbox");
+                checkboxes.forEach((checkbox) => {
+                    const val = checkbox.value;
+                    const option = Array.from(select.options).find((opt) => opt.value === val);
+                    checkbox.checked = !!(option && option.selected);
                 });
             } else {
-                updateSingleToggleLabel(sel, toggle);
+                updateSingleToggleLabel(select, toggle);
             }
         });
-    }
+    };
 
-    function buildActiveFilters() {
-        if (!activeFilterChips || !activeFilterBar) return;
+    const buildActiveFilters = () => {
+        if (!activeFilterChips || !activeFilterBar) {
+            return;
+        }
 
         activeFilterChips.innerHTML = "";
-        var totalChips = 0;
+        let totalChips = 0;
 
-        filterSelects.forEach(function (select) {
-            var key = select.getAttribute("data-filter-key");
-            if (!key) return;
-            var label = filterLabelMap[key] || key;
+        filterSelects.forEach((select) => {
+            const key = select.getAttribute("data-filter-key");
+            if (!key) {
+                return;
+            }
+            const label = filterLabelMap[key] || key;
 
             if (select.multiple) {
-                var values = [];
-                var labels = [];
-                Array.prototype.forEach.call(select.options, function (opt) {
-                    if (!opt.selected || !opt.value || opt.value === "all") return;
+                const values = [];
+                const labels = [];
+                Array.from(select.options).forEach((opt) => {
+                    if (!opt.selected || !opt.value || opt.value === "all") {
+                        return;
+                    }
                     values.push(opt.value);
                     labels.push(opt.textContent);
                 });
@@ -487,10 +386,12 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
                     totalChips += 1;
                 }
             } else {
-                var value = select.value;
-                if (!value || value === "all") return;
-                var opt = select.options[select.selectedIndex];
-                var labelText = opt ? opt.textContent : value;
+                const value = select.value;
+                if (!value || value === "all") {
+                    return;
+                }
+                const opt = select.options[select.selectedIndex];
+                const labelText = opt ? opt.textContent : value;
                 createFilterChip(select, key, label, [value], [labelText], false);
                 totalChips += 1;
             }
@@ -501,18 +402,18 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
         } else {
             activeFilterBar.classList.remove("vdemo-active-filters-empty");
         }
-    }
+    };
 
-    function createFilterChip(select, key, label, values, labels, isMulti) {
-        var chip = document.createElement("button");
+    const createFilterChip = (select, key, label, values, labels, isMulti) => {
+        const chip = document.createElement("button");
         chip.type = "button";
         chip.className = "vdemo-filter-chip";
 
-        var spanLabel = document.createElement("span");
+        const spanLabel = document.createElement("span");
         spanLabel.className = "vdemo-filter-chip-label";
-        spanLabel.textContent = label + ": " + labels.join(", ");
+        spanLabel.textContent = `${label}: ${labels.join(", ")}`;
 
-        var spanClose = document.createElement("span");
+        const spanClose = document.createElement("span");
         spanClose.className = "vdemo-filter-chip-close";
         spanClose.setAttribute("aria-hidden", "true");
         spanClose.textContent = "×";
@@ -520,19 +421,17 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
         chip.appendChild(spanLabel);
         chip.appendChild(spanClose);
 
-        chip.addEventListener("click", function () {
+        chip.addEventListener("click", () => {
             if (isMulti) {
-                Array.prototype.forEach.call(select.options, function (opt) {
-                    if (values.indexOf(opt.value) !== -1) {
+                Array.from(select.options).forEach((opt) => {
+                    if (values.includes(opt.value)) {
                         opt.selected = false;
                     }
                 });
-                var anySelected = Array.prototype.some.call(select.options, function (opt) {
-                    return opt.selected && opt.value !== "all";
-                });
-                var allOpt = select.querySelector('option[value="all"]');
+                const anySelected = Array.from(select.options).some((opt) => opt.selected && opt.value !== "all");
+                const allOpt = select.querySelector('option[value="all"]');
                 if (allOpt && !anySelected) {
-                    Array.prototype.forEach.call(select.options, function (opt) {
+                    Array.from(select.options).forEach((opt) => {
                         opt.selected = false;
                     });
                     allOpt.selected = true;
@@ -544,18 +443,20 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
         });
 
         activeFilterChips.appendChild(chip);
-    }
+    };
 
-    function computeActiveFilters() {
-        var activeFilters = {};
+    const computeActiveFilters = () => {
+        const activeFilters = {};
 
-        filterSelects.forEach(function (select) {
-            var key = select.getAttribute("data-filter-key");
-            if (!key) return;
+        filterSelects.forEach((select) => {
+            const key = select.getAttribute("data-filter-key");
+            if (!key) {
+                return;
+            }
 
             if (select.multiple) {
-                var values = [];
-                Array.prototype.forEach.call(select.options, function (opt) {
+                const values = [];
+                Array.from(select.options).forEach((opt) => {
                     if (opt.selected && opt.value && opt.value !== "all") {
                         values.push(opt.value.toLowerCase());
                     }
@@ -564,7 +465,7 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
                     activeFilters[key] = values;
                 }
             } else {
-                var value = select.value;
+                const value = select.value;
                 if (value && value !== "all") {
                     activeFilters[key] = [value.toLowerCase()];
                 }
@@ -572,98 +473,98 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
         });
 
         return activeFilters;
-    }
+    };
 
-    function updateFilterOptionAvailability(allowedByKey) {
-        filterSelects.forEach(function (select) {
-            var key = select.getAttribute("data-filter-key");
-            if (!key) return;
-
-            if (key === "genre") {
+    const updateFilterOptionAvailability = (allowedByKey) => {
+        filterSelects.forEach((select) => {
+            const key = select.getAttribute("data-filter-key");
+            if (!key || key === "genre") {
                 return;
             }
 
-            var allowed = allowedByKey[key];
-            if (!allowed) return;
+            const allowed = allowedByKey[key];
+            if (!allowed) {
+                return;
+            }
 
             if (select.multiple) {
-                Array.prototype.forEach.call(select.options, function (opt) {
-                    if (!opt.value || opt.value === "all") return;
-                    var val = opt.value.toLowerCase();
-                    var isAllowed = allowed.has(val);
+                Array.from(select.options).forEach((opt) => {
+                    if (!opt.value || opt.value === "all") {
+                        return;
+                    }
+                    const val = opt.value.toLowerCase();
+                    const isAllowed = allowed.has(val);
                     opt.disabled = !isAllowed;
                     if (!isAllowed && opt.selected) {
                         opt.selected = false;
                     }
                 });
 
-                var anySelected = Array.prototype.some.call(select.options, function (opt) {
-                    return opt.selected && opt.value !== "all";
-                });
-                var allOpt = select.querySelector('option[value="all"]');
+                const anySelected = Array.from(select.options).some((opt) => opt.selected && opt.value !== "all");
+                const allOpt = select.querySelector('option[value="all"]');
                 if (allOpt && !anySelected) {
-                    Array.prototype.forEach.call(select.options, function (opt) {
+                    Array.from(select.options).forEach((opt) => {
                         opt.selected = false;
                     });
                     allOpt.selected = true;
                 }
             } else {
-                var selected = select.options[select.selectedIndex];
+                const selected = select.options[select.selectedIndex];
                 if (selected && selected.value && selected.value !== "all") {
-                    var sval = selected.value.toLowerCase();
+                    const sval = selected.value.toLowerCase();
                     if (!allowed.has(sval)) {
                         select.value = "all";
                     }
                 }
             }
 
-            var cfg = dropdownConfigs.find(function (c) { return c.select === select; });
+            const cfg = dropdownConfigs.find((config) => config.select === select);
             if (cfg && cfg.menu) {
-                var rows = cfg.menu.querySelectorAll("[data-value]");
-                rows.forEach(function (row) {
-                    var val = row.getAttribute("data-value");
+                const rows = cfg.menu.querySelectorAll("[data-value]");
+                rows.forEach((row) => {
+                    const val = row.getAttribute("data-value");
                     if (!val || val === "all") {
                         row.style.display = "";
                         return;
                     }
-                    var isAllowed = allowed.has(val.toLowerCase());
+                    const isAllowed = allowed.has(val.toLowerCase());
                     row.style.display = isAllowed ? "" : "none";
                 });
             }
         });
 
         syncDropdownUIFromSelects();
-    }
+    };
 
-    function applyFilters() {
+    const applyFilters = () => {
         if (!grid) {
             return;
         }
 
-        var activeFilters = computeActiveFilters();
+        const activeFilters = computeActiveFilters();
 
         grid.classList.remove("vdemo-grid-fade-in");
         grid.classList.add("vdemo-grid-fade-out");
 
-        window.setTimeout(function () {
-            var matches = 0;
-            var visibleCards = [];
+        window.setTimeout(() => {
+            let matches = 0;
+            const visibleCards = [];
 
-            cards.forEach(function (card) {
-                var visible = true;
+            cards.forEach((card) => {
+                let visible = true;
 
-                Object.keys(activeFilters).forEach(function (key) {
-                    if (!visible) return;
-                    var attr = card.getAttribute("data-" + key) || "";
-                    var tokens = attr.toLowerCase().split(/\s+/).filter(function (t) { return t.length > 0; });
+                Object.keys(activeFilters).forEach((key) => {
+                    if (!visible) {
+                        return;
+                    }
+                    const attr = card.getAttribute(`data-${key}`) || "";
+                    const tokens = attr.toLowerCase().split(/\s+/).filter((token) => token.length > 0);
                     if (tokens.length === 0) {
                         visible = false;
                         return;
                     }
-                    var values = activeFilters[key];
-                    var hasAny = values.some(function (v) {
-                        return tokens.indexOf(v) !== -1;
-                    });
+                    const values = activeFilters[key];
+                    const hasAny = values.some((value) => tokens.includes(value));
                     if (!hasAny) {
                         visible = false;
                     }
@@ -682,21 +583,21 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
                 resultCount.textContent = String(matches);
             }
 
-            var allowedByKey = {
+            const allowedByKey = {
                 genre: new Set(),
                 style: new Set(),
                 mood: new Set(),
                 speed: new Set(),
                 pitch: new Set(),
-                industry: new Set()
+                industry: new Set(),
             };
 
-            visibleCards.forEach(function (card) {
-                ["style", "mood", "speed", "pitch", "industry", "genre"].forEach(function (key) {
-                    var attr = card.getAttribute("data-" + key) || "";
-                    var tokens = attr.toLowerCase().split(/\s+/).filter(function (t) { return t.length > 0; });
-                    tokens.forEach(function (t) {
-                        allowedByKey[key].add(t);
+            visibleCards.forEach((card) => {
+                ["style", "mood", "speed", "pitch", "industry", "genre"].forEach((key) => {
+                    const attr = card.getAttribute(`data-${key}`) || "";
+                    const tokens = attr.toLowerCase().split(/\s+/).filter((token) => token.length > 0);
+                    tokens.forEach((token) => {
+                        allowedByKey[key].add(token);
                     });
                 });
             });
@@ -704,7 +605,6 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
             updateFilterOptionAvailability(allowedByKey);
             buildActiveFilters();
 
-            // Pagination anwenden
             currentPageCards = visibleCards.slice();
             currentPage = 1;
             applyPagination();
@@ -712,30 +612,121 @@ var filterSelects = document.querySelectorAll(".vdemo-select");
             grid.classList.remove("vdemo-grid-fade-out");
             grid.classList.add("vdemo-grid-fade-in");
         }, 160);
-    }
+    };
 
-    
-filterSelects.forEach(function (select) {
-        select.addEventListener("change", applyFilters);
-    });
+    const changePageWithFade = (targetPage, totalPages) => {
+        if (!grid) {
+            return;
+        }
+        if (typeof targetPage !== "number" || Number.isNaN(targetPage)) {
+            return;
+        }
+        if (targetPage < 1 || targetPage > totalPages) {
+            return;
+        }
+        if (currentPage === targetPage) {
+            return;
+        }
 
-    if (resetButton) {
-        resetButton.addEventListener("click", function () {
-            filterSelects.forEach(function (select) {
-                if (select.multiple) {
-                    Array.prototype.forEach.call(select.options, function (opt) {
-                        opt.selected = (opt.value === "all");
-                    });
-                } else {
-                    select.value = "all";
-                }
+        grid.classList.remove("vdemo-grid-fade-in");
+        grid.classList.add("vdemo-grid-fade-out");
+
+        window.setTimeout(() => {
+            currentPage = targetPage;
+            applyPagination();
+            grid.classList.remove("vdemo-grid-fade-out");
+            grid.classList.add("vdemo-grid-fade-in");
+
+            const anchor = document.getElementById("Demo-Grid-start") || grid || document.getElementById("vdemo-grid");
+            if (anchor && typeof anchor.scrollIntoView === "function") {
+                anchor.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        }, 160);
+    };
+
+    const renderPagination = () => {
+        if (!grid) {
+            return;
+        }
+
+        const allVisible = currentPageCards && currentPageCards.length ? currentPageCards : cards.slice();
+        const total = allVisible.length;
+        const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+        if (paginationNav && paginationNav.parentNode) {
+            paginationNav.parentNode.removeChild(paginationNav);
+        }
+
+        if (totalPages <= 1) {
+            paginationNav = null;
+            cards.forEach((card) => {
+                card.classList.remove("vdemo-card-page-hidden");
             });
-            applyFilters();
-        });
-    }
+            return;
+        }
 
-    function updateDrawerCount() {
-        var count = Object.keys(memoItems).length;
+        paginationNav = document.createElement("nav");
+        paginationNav.className = "vdemo-pagination";
+        paginationNav.setAttribute("aria-label", "Demos");
+
+        for (let i = 1; i <= totalPages; i += 1) {
+            const pageNum = i;
+            const link = document.createElement("button");
+            link.type = "button";
+            link.className = "vdemo-page-link";
+            link.textContent = String(pageNum);
+            if (pageNum === currentPage) {
+                link.classList.add("vdemo-page-link-active");
+            }
+            link.addEventListener("click", () => {
+                changePageWithFade(pageNum, totalPages);
+            });
+            paginationNav.appendChild(link);
+        }
+
+        const afterNode = grid;
+        if (afterNode && afterNode.parentNode) {
+            afterNode.parentNode.insertBefore(paginationNav, afterNode.nextSibling);
+        }
+    };
+
+    const applyPagination = () => {
+        if (!grid) {
+            return;
+        }
+
+        const allVisible = currentPageCards && currentPageCards.length
+            ? currentPageCards
+            : cards.filter((card) => !card.classList.contains("vdemo-card-filter-hidden"));
+
+        const total = allVisible.length;
+        const totalPages = Math.max(1, Math.ceil(total / pageSize));
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+        const start = (currentPage - 1) * pageSize;
+        const end = start + pageSize;
+
+        cards.forEach((card) => {
+            card.classList.add("vdemo-card-page-hidden");
+        });
+
+        allVisible.slice(start, end).forEach((card) => {
+            card.classList.remove("vdemo-card-page-hidden");
+        });
+
+        renderPagination();
+        bindMemoButtonsClicks();
+        if (typeof syncMemoButtons === "function") {
+            syncMemoButtons();
+        }
+    };
+
+    const updateDrawerCount = () => {
+        const count = Object.keys(memoItems).length;
         if (drawerCount) {
             drawerCount.textContent = String(count);
         }
@@ -747,7 +738,7 @@ filterSelects.forEach(function (select) {
                 drawerToggle.style.display = "";
                 if (prevMemoCount === 0) {
                     drawerToggle.classList.add("vdemo-drawer-toggle-pop");
-                    setTimeout(function () {
+                    setTimeout(() => {
                         drawerToggle.classList.remove("vdemo-drawer-toggle-pop");
                     }, 600);
                 }
@@ -768,13 +759,15 @@ filterSelects.forEach(function (select) {
         prevMemoCount = count;
         updateFluentFormsField();
         buildContactMemoBox();
-    }
+    };
 
-    function renderDrawerList(newId) {
-        if (!drawerList) return;
+    const renderDrawerList = (newId) => {
+        if (!drawerList) {
+            return;
+        }
         drawerList.innerHTML = "";
 
-        var ids = Object.keys(memoItems);
+        const ids = Object.keys(memoItems);
         if (ids.length === 0) {
             if (drawer) {
                 drawer.classList.remove("vdemo-drawer-open");
@@ -783,102 +776,69 @@ filterSelects.forEach(function (select) {
             return;
         }
 
-        var grouped = {};
+        const grouped = {};
 
-        ids.forEach(function (id) {
-            var item = memoItems[id];
-            var slug = (item && item.genreSlug) ? item.genreSlug : "ohne-genre";
-            var label = (item && item.genre) ? item.genre : "Weitere Demos";
+        ids.forEach((id) => {
+            const item = memoItems[id];
+            const slug = item && item.genreSlug ? item.genreSlug : "ohne-genre";
+            const label = item && item.genre ? item.genre : "Weitere Demos";
             if (!grouped[slug]) {
-                grouped[slug] = { label: label, entries: [] };
+                grouped[slug] = { label, entries: [] };
             }
-            grouped[slug].entries.push({ id: id, item: item });
+            grouped[slug].entries.push({ id, item });
         });
 
-        Object.keys(grouped).forEach(function (slug) {
-            var group = grouped[slug];
+        Object.keys(grouped).forEach((slug) => {
+            const group = grouped[slug];
 
-            var groupLi = document.createElement("li");
+            const groupLi = document.createElement("li");
             groupLi.className = "vdemo-drawer-group";
 
-            var header = document.createElement("div");
+            const header = document.createElement("div");
             header.className = "vdemo-drawer-group-header-strip";
             header.textContent = group.label || "Weitere Demos";
 
-            var itemsWrap = document.createElement("div");
+            const itemsWrap = document.createElement("div");
             itemsWrap.className = "vdemo-drawer-group-items";
 
-            group.entries.forEach(function (entry) {
-                var id = entry.id;
-                var item = entry.item || {};
-                var title = item.title || "";
-                var info = item.info || "";
-                var audioUrl = item.audio || "";
-                var badge = item.badge || "";
+            group.entries.forEach((entry) => {
+                const { id } = entry;
+                const item = entry.item || {};
+                const title = item.title || "";
+                const info = item.info || "";
+                const audioUrl = item.audio || "";
 
-                var card = document.createElement("div");
+                const card = document.createElement("div");
                 card.className = "vdemo-drawer-item";
                 if (newId && String(id) === String(newId)) {
-                    card.className += " vdemo-drawer-item--new";
+                    card.classList.add("vdemo-drawer-item--new");
                 }
 
-                var titleRow = document.createElement("div");
+                const titleRow = document.createElement("div");
                 titleRow.className = "vdemo-drawer-item-title-row";
 
-                // ID-Badge wie im Demo-Grid (links vor dem Titel)
-                var idBadge = null;
+                let idBadge = null;
                 if (item && item.badge) {
                     idBadge = document.createElement("span");
                     idBadge.className = "vdemo-badge vdemo-badge-inline";
                     idBadge.textContent = item.badge;
                 }
 
-                var titleSpan = document.createElement("span");
+                const titleSpan = document.createElement("span");
                 titleSpan.className = "vdemo-drawer-item-title";
                 titleSpan.textContent = title;
 
-                var actionsWrap = document.createElement("div");
+                const actionsWrap = document.createElement("div");
                 actionsWrap.className = "vdemo-drawer-item-actions";
 
-                var infoBadge = null;
-                if (info) {
-                    infoBadge = document.createElement("span");
-                    infoBadge.className = "vdemo-drawer-info-badge";
-
-                    var infoInner = document.createElement("div");
-                    infoInner.className = "vdemo-drawer-info-tooltip";
-
-                    var parts = info.split("•").map(function (s) {
-                        return s.trim();
-                    }).filter(function (s) {
-                        return s.length > 0;
-                    });
-
-                    if (!parts.length) {
-                        parts = [info];
-                    }
-
-                    parts.forEach(function (part) {
-                        var chip = document.createElement("span");
-                        chip.className = "vdemo-drawer-info-chip";
-                        chip.textContent = part;
-                        infoInner.appendChild(chip);
-                    });
-
-                    infoBadge.appendChild(infoInner);
-                }
-
-                var removeBtn = document.createElement("button");
+                const removeBtn = document.createElement("button");
                 removeBtn.type = "button";
                 removeBtn.className = "vdemo-drawer-item-remove";
                 removeBtn.textContent = "Entfernen";
-                removeBtn.addEventListener("click", function () {
+                removeBtn.addEventListener("click", () => {
                     toggleMemo(id, item);
                 });
 
-                if (infoBadge) {
-                    actionsWrap.appendChild(infoBadge);
-                }
                 actionsWrap.appendChild(removeBtn);
 
                 if (idBadge) {
@@ -890,17 +850,17 @@ filterSelects.forEach(function (select) {
                 card.appendChild(titleRow);
 
                 if (audioUrl) {
-                    var audioRow = document.createElement("div");
+                    const audioRow = document.createElement("div");
                     audioRow.className = "vdemo-drawer-audio";
 
-                    var playBtn = document.createElement("button");
+                    const playBtn = document.createElement("button");
                     playBtn.type = "button";
                     playBtn.className = "vdemo-play-button";
 
-                    var iconPlay = document.createElement("span");
+                    const iconPlay = document.createElement("span");
                     iconPlay.className = "vdemo-play-icon-play";
 
-                    var iconPause = document.createElement("span");
+                    const iconPause = document.createElement("span");
                     iconPause.className = "vdemo-play-icon-pause";
 
                     playBtn.appendChild(iconPlay);
@@ -908,23 +868,23 @@ filterSelects.forEach(function (select) {
 
                     audioRow.appendChild(playBtn);
 
-                    var progWrap = document.createElement("div");
+                    const progWrap = document.createElement("div");
                     progWrap.className = "vdemo-progress-wrapper";
 
-                    var progTrack = document.createElement("div");
+                    const progTrack = document.createElement("div");
                     progTrack.className = "vdemo-progress-track";
 
-                    var progFill = document.createElement("div");
+                    const progFill = document.createElement("div");
                     progFill.className = "vdemo-progress-fill";
 
                     progTrack.appendChild(progFill);
                     progWrap.appendChild(progTrack);
 
-                    var time = document.createElement("span");
+                    const time = document.createElement("span");
                     time.className = "vdemo-time-label";
                     time.textContent = "0:00";
 
-                    var audioEl = document.createElement("audio");
+                    const audioEl = document.createElement("audio");
                     audioEl.className = "vdemo-audio";
                     audioEl.setAttribute("src", audioUrl);
                     audioEl.setAttribute("preload", "none");
@@ -945,20 +905,24 @@ filterSelects.forEach(function (select) {
         });
 
         wireAudioContainers(drawerList);
-    }
+    };
 
-    function openDrawer() {
-        if (!drawer || !drawerToggle) return;
+    const openDrawer = () => {
+        if (!drawer || !drawerToggle) {
+            return;
+        }
         drawer.classList.add("vdemo-drawer-open");
         drawerToggle.classList.add("vdemo-drawer-toggle-active");
         drawerToggle.classList.add("vdemo-drawer-toggle-hidden");
         drawerToggle.style.pointerEvents = "none";
         drawerToggle.style.display = "none";
         drawer.setAttribute("aria-hidden", "false");
-    }
+    };
 
-    function closeDrawer() {
-        if (!drawer || !drawerToggle) return;
+    const closeDrawer = () => {
+        if (!drawer || !drawerToggle) {
+            return;
+        }
         drawer.classList.remove("vdemo-drawer-open");
         drawerToggle.classList.remove("vdemo-drawer-toggle-active");
         drawerToggle.classList.remove("vdemo-drawer-toggle-hidden");
@@ -967,10 +931,10 @@ filterSelects.forEach(function (select) {
             drawerToggle.style.display = "";
         }
         drawer.setAttribute("aria-hidden", "true");
-    }
+    };
 
     if (drawerToggle) {
-        drawerToggle.addEventListener("click", function () {
+        drawerToggle.addEventListener("click", () => {
             if (drawer.classList.contains("vdemo-drawer-open")) {
                 closeDrawer();
             } else {
@@ -980,31 +944,32 @@ filterSelects.forEach(function (select) {
     }
 
     if (drawerClose) {
-        drawerClose.addEventListener("click", function () {
+        drawerClose.addEventListener("click", () => {
             closeDrawer();
         });
     }
 
     if (drawerAdd) {
-        drawerAdd.addEventListener("click", function () {
-            // Weiterleitung zur Kontaktseite mit passendem Anchor (Desktop vs. Mobil)
-            var basePath = "/kontakt/";
-            var isMobile = false;
+        drawerAdd.addEventListener("click", () => {
+            const basePath = "/kontakt/";
+            let isMobile = false;
             try {
                 if (window.matchMedia) {
                     isMobile = window.matchMedia("(max-width: 768px)").matches;
                 } else if (typeof window.innerWidth === "number") {
                     isMobile = window.innerWidth <= 768;
                 }
-            } catch (e) {}
+            } catch (error) {
+                // Ignorieren.
+            }
 
-            var anchor = isMobile ? "#kontaktformular_direkt-mobil" : "#kontaktformular_direkt";
-            window.location.href = basePath + anchor;
+            const anchor = isMobile ? "#kontaktformular_direkt-mobil" : "#kontaktformular_direkt";
+            window.location.href = `${basePath}${anchor}`;
         });
     }
 
     if (drawerClear) {
-        drawerClear.addEventListener("click", function () {
+        drawerClear.addEventListener("click", () => {
             memoItems = {};
             saveMemosToStorage();
             syncMemoButtons();
@@ -1014,35 +979,39 @@ filterSelects.forEach(function (select) {
     }
 
     if (drawerShare) {
-        drawerShare.addEventListener("click", function () {
-            var ids = Object.keys(memoItems);
-            if (!ids.length) return;
+        drawerShare.addEventListener("click", () => {
+            const ids = Object.keys(memoItems);
+            if (!ids.length) {
+                return;
+            }
 
-            var url = new URL(window.location.href.split("#")[0]);
+            const url = new URL(window.location.href.split("#")[0]);
             url.searchParams.set("vdemo_favs", ids.join(","));
-            var shareUrl = url.toString();
+            const shareUrl = url.toString();
 
             if (navigator.share) {
                 navigator.share({
                     title: "Sprecher Pascal Krell - Demos - Merkliste",
                     text: "Hier ist unsere Auswahl an gemerkten Sprecher-Demos.",
-                    url: shareUrl
-                }).catch(function () {});
+                    url: shareUrl,
+                }).catch(() => {
+                    // Ignorieren.
+                });
             } else if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(shareUrl).then(function () {
+                navigator.clipboard.writeText(shareUrl).then(() => {
                     alert("Der Link zu Deiner Merkliste wurde in die Zwischenablage kopiert.");
-                }).catch(function () {
-                    alert("Hier ist Dein Link zur Merkliste:\n" + shareUrl);
+                }).catch(() => {
+                    alert(`Hier ist Dein Link zur Merkliste:\n${shareUrl}`);
                 });
             } else {
-                alert("Hier ist Dein Link zur Merkliste:\n" + shareUrl);
+                alert(`Hier ist Dein Link zur Merkliste:\n${shareUrl}`);
             }
         });
     }
 
-    function toggleMemo(id, data) {
-        var key = String(id);
-        var hadMemos = Object.keys(memoItems).length > 0;
+    const toggleMemo = (id, data) => {
+        const key = String(id);
+        const hadMemos = Object.keys(memoItems).length > 0;
 
         if (memoItems[key]) {
             delete memoItems[key];
@@ -1054,20 +1023,19 @@ filterSelects.forEach(function (select) {
         renderDrawerList(memoItems[key] ? id : null);
         updateDrawerCount();
 
-        var hasMemosNow = Object.keys(memoItems).length > 0;
+        const hasMemosNow = Object.keys(memoItems).length > 0;
 
-        // Auf der Demo-Seite: beim ersten Eintrag Merkliste automatisch öffnen
         if (!hadMemos && hasMemosNow && grid) {
             openDrawer();
         }
-    }
+    };
 
-    function syncMemoButtons() {
+    const syncMemoButtons = () => {
         memoButtons = document.querySelectorAll(".vdemo-memo-button");
-        memoButtons.forEach(function (btn) {
-            var id = btn.getAttribute("data-demo-id");
-            var label = btn.querySelector(".vdemo-memo-label");
-            var miniTooltip = btn.querySelector(".vdemo-memo-mini-tooltip");
+        memoButtons.forEach((btn) => {
+            const id = btn.getAttribute("data-demo-id");
+            const label = btn.querySelector(".vdemo-memo-label");
+            const miniTooltip = btn.querySelector(".vdemo-memo-mini-tooltip");
 
             if (memoItems[id]) {
                 btn.classList.add("vdemo-memo-button-active");
@@ -1087,53 +1055,51 @@ filterSelects.forEach(function (select) {
                 }
             }
         });
-    }
+    };
 
-
-    
-    function updateFluentFormsField() {
-        var lines = [];
-        Object.keys(memoItems).forEach(function (id) {
-            var item = memoItems[id];
-            var lineId = (item.badge && item.badge.trim()) ? item.badge.trim() : id;
-            var line = lineId + " " + (item.title || "");
+    const updateFluentFormsField = () => {
+        const lines = [];
+        Object.keys(memoItems).forEach((id) => {
+            const item = memoItems[id];
+            const lineId = item.badge && item.badge.trim() ? item.badge.trim() : id;
+            let line = `${lineId} ${item.title || ""}`;
             if (item.info) {
-                line += " | " + item.info;
+                line += ` | ${item.info}`;
             }
             if (item.genre) {
-                line += " | Genre: " + item.genre;
+                line += ` | Genre: ${item.genre}`;
             }
             lines.push(line);
         });
 
-        var text = "";
-        if (lines.length > 0) {
-            text = "Gemerkte Demos:\n" + lines.join("\n");
-        }
-
-        var fields = document.querySelectorAll(".demo-memo-field");
+        const text = lines.length > 0 ? `Gemerkte Demos:\n${lines.join("\n")}` : "";
+        const fields = document.querySelectorAll(".demo-memo-field");
         if (fields && fields.length > 0) {
-            fields.forEach(function (field) {
+            fields.forEach((field) => {
                 field.value = text;
             });
         }
-    }
+    };
 
-    function buildContactMemoBox() {
+    const buildContactMemoBox = () => {
         try {
-            // Formular anhand manueller Anker-Position finden
-            var anchor = document.querySelector(".vdemo-contact-memos-anchor");
-            if (!anchor) return;
+            const anchor = document.querySelector(".vdemo-contact-memos-anchor");
+            if (!anchor) {
+                return;
+            }
 
-            var form = anchor.closest("form");
-            if (!form) return;
+            const form = anchor.closest("form");
+            if (!form) {
+                return;
+            }
 
-            // Nachrichtenfeld finden (Label mit "Nachricht" bevorzugt)
-            var msgField = null;
-            var textareas = form.querySelectorAll("textarea");
-            textareas.forEach(function (ta) {
-                if (msgField) return;
-                var label = ta.id ? form.querySelector('label[for="' + ta.id + '"]') : null;
+            let msgField = null;
+            const textareas = form.querySelectorAll("textarea");
+            textareas.forEach((ta) => {
+                if (msgField) {
+                    return;
+                }
+                const label = ta.id ? form.querySelector(`label[for="${ta.id}"]`) : null;
                 if (label && /nachricht/i.test(label.textContent || "")) {
                     msgField = ta;
                 }
@@ -1141,26 +1107,27 @@ filterSelects.forEach(function (select) {
             if (!msgField && textareas.length) {
                 msgField = textareas[0];
             }
-            if (!msgField) return;
+            if (!msgField) {
+                return;
+            }
 
-            // Wrapper nur einmal anlegen
-            var wrap = form.querySelector(".vdemo-contact-memos-wrap");
+            let wrap = form.querySelector(".vdemo-contact-memos-wrap");
             if (!wrap) {
                 wrap = document.createElement("div");
                 wrap.className = "vdemo-contact-memos-wrap";
 
-                var title = document.createElement("div");
+                const title = document.createElement("div");
                 title.className = "vdemo-contact-memos-title";
                 title.textContent = "Gemerkte Demos";
 
-                var box = document.createElement("div");
+                const box = document.createElement("div");
                 box.className = "vdemo-contact-memos";
 
-                var hint = document.createElement("div");
+                const hint = document.createElement("div");
                 hint.className = "vdemo-contact-memos-hint";
                 hint.textContent = "Die von Dir ausgewählten Demos werden beim Absenden Deiner Nachricht automatisch mitgeschickt, um Deine Wünsche für die Sprachaufnahmen besser zu verstehen.";
 
-                var hidden = document.createElement("input");
+                const hidden = document.createElement("input");
                 hidden.type = "hidden";
                 hidden.name = "gemerkte_demos";
                 hidden.className = "demo-memo-field";
@@ -1170,36 +1137,36 @@ filterSelects.forEach(function (select) {
                 wrap.appendChild(hint);
                 wrap.appendChild(hidden);
 
-                // Beim Absenden die gemerkten Demos zusätzlich an das Nachrichtenfeld anhängen,
-                // damit sie sicher in E-Mail und Backend erscheinen.
                 if (!form.__vdemoMemoSubmitBound) {
                     form.__vdemoMemoSubmitBound = true;
-                    form.addEventListener("submit", function () {
+                    form.addEventListener("submit", () => {
                         try {
-                            var listLines = [];
-                            Object.keys(memoItems || {}).forEach(function (id) {
-                                var item = memoItems[id] || {};
-                                var badge = (item.badge && String(item.badge).trim()) || id;
-                                var title = item.title || "";
-                                var line = "ID " + badge + " – " + title;
+                            const listLines = [];
+                            Object.keys(memoItems || {}).forEach((id) => {
+                                const item = memoItems[id] || {};
+                                const badge = (item.badge && String(item.badge).trim()) || id;
+                                const titleText = item.title || "";
+                                let line = `ID ${badge} – ${titleText}`;
                                 if (item.info) {
-                                    line += " | " + item.info;
+                                    line += ` | ${item.info}`;
                                 }
                                 if (item.genre) {
-                                    line += " | Genre: " + item.genre;
+                                    line += ` | Genre: ${item.genre}`;
                                 }
                                 listLines.push(line);
                             });
 
-                            var hf = wrap.querySelector(".demo-memo-field");
-                            if (hf) {
-                                hf.value = listLines.join("\n");
+                            const hiddenField = wrap.querySelector(".demo-memo-field");
+                            if (hiddenField) {
+                                hiddenField.value = listLines.join("\n");
                             }
-                        } catch (e) {}
+                        } catch (error) {
+                            // Ignorieren.
+                        }
                     });
                 }
 
-                var group = msgField.closest(".ff-el-group");
+                const group = msgField.closest(".ff-el-group");
                 if (anchor && anchor.parentNode) {
                     anchor.parentNode.insertBefore(wrap, anchor.nextSibling);
                 } else if (group && group.parentNode) {
@@ -1211,40 +1178,40 @@ filterSelects.forEach(function (select) {
                 }
             }
 
-            var boxEl = wrap.querySelector(".vdemo-contact-memos");
-            if (!boxEl) return;
+            const boxEl = wrap.querySelector(".vdemo-contact-memos");
+            if (!boxEl) {
+                return;
+            }
             boxEl.innerHTML = "";
 
-            var ids = Object.keys(memoItems || {});
+            const ids = Object.keys(memoItems || {});
             if (!ids.length) {
                 wrap.style.display = "none";
             } else {
                 wrap.style.display = "";
             }
 
-            ids.forEach(function (id) {
-                var item = memoItems[id] || {};
-                var badge = (item.badge && String(item.badge).trim()) || id;
-                var title = item.title || "";
-                var label = "ID " + badge + " – " + title;
+            ids.forEach((id) => {
+                const item = memoItems[id] || {};
+                const badge = (item.badge && String(item.badge).trim()) || id;
+                const title = item.title || "";
+                const label = `ID ${badge} – ${title}`;
 
-                var chip = document.createElement("span");
+                const chip = document.createElement("span");
                 chip.className = "vdemo-contact-chip";
                 chip.setAttribute("data-memo-id", id);
                 chip.textContent = label;
 
-                var btn = document.createElement("button");
+                const btn = document.createElement("button");
                 btn.type = "button";
                 btn.className = "vdemo-contact-chip-remove";
                 btn.setAttribute("aria-label", "Aus Merkliste entfernen");
                 btn.textContent = "×";
-                btn.addEventListener("click", function (ev) {
-                    ev.preventDefault();
-                    // vorhandene Toggle-Logik nutzen, um Merkliste & Drawer zu aktualisieren
+                btn.addEventListener("click", (event) => {
+                    event.preventDefault();
                     if (typeof toggleMemo === "function") {
                         toggleMemo(id, item);
                     } else {
-                        // Fallback: direkt im Storage entfernen
                         delete memoItems[id];
                         saveMemosToStorage();
                         renderDrawerList();
@@ -1257,81 +1224,71 @@ filterSelects.forEach(function (select) {
                 boxEl.appendChild(chip);
             });
 
-            // Hidden-Feld mit Text füllen (parallel zu updateFluentFormsField)
-            var hiddenField = wrap.querySelector(".demo-memo-field");
+            const hiddenField = wrap.querySelector(".demo-memo-field");
             if (hiddenField) {
-                var lines = [];
-                Object.keys(memoItems || {}).forEach(function (id) {
-                    var item = memoItems[id] || {};
-                    var lineId = (item.badge && item.badge.trim()) ? item.badge.trim() : id;
-                    var line = lineId + " " + (item.title || "");
+                const lines = [];
+                Object.keys(memoItems || {}).forEach((id) => {
+                    const item = memoItems[id] || {};
+                    const lineId = item.badge && item.badge.trim() ? item.badge.trim() : id;
+                    let line = `${lineId} ${item.title || ""}`;
                     if (item.info) {
-                        line += " | " + item.info;
+                        line += ` | ${item.info}`;
                     }
                     if (item.genre) {
-                        line += " | Genre: " + item.genre;
+                        line += ` | Genre: ${item.genre}`;
                     }
                     lines.push(line);
                 });
                 hiddenField.value = lines.join("\n");
             }
-        } catch (_e) {}
-    }
+        } catch (error) {
+            // Ignorieren.
+        }
+    };
 
-function styleSelects(nodeList) {
-        nodeList.forEach(function (sel) {
-            sel.addEventListener("mouseenter", function () {
-                sel.classList.add("vdemo-select-hover");
+    const styleSelects = (nodeList) => {
+        nodeList.forEach((select) => {
+            select.addEventListener("mouseenter", () => {
+                select.classList.add("vdemo-select-hover");
             });
-            sel.addEventListener("mouseleave", function () {
-                sel.classList.remove("vdemo-select-hover");
+            select.addEventListener("mouseleave", () => {
+                select.classList.remove("vdemo-select-hover");
             });
-            sel.addEventListener("focus", function () {
-                sel.classList.add("vdemo-select-focus");
+            select.addEventListener("focus", () => {
+                select.classList.add("vdemo-select-focus");
             });
-            sel.addEventListener("blur", function () {
-                sel.classList.remove("vdemo-select-focus");
+            select.addEventListener("blur", () => {
+                select.classList.remove("vdemo-select-focus");
             });
         });
-    }
+    };
 
-    function hydrateMemosFromUrl() {
+    const hydrateMemosFromUrl = () => {
         try {
-            var params = new URLSearchParams(window.location.search);
-            var favParam = params.get("vdemo_favs");
-            if (!favParam) return;
+            const params = new URLSearchParams(window.location.search);
+            const favParam = params.get("vdemo_favs");
+            if (!favParam) {
+                return;
+            }
 
-            var ids = favParam.split(",").map(function (s) {
-                return s.trim();
-            }).filter(function (s) {
-                return s !== "";
-            });
+            const ids = favParam.split(",").map((value) => value.trim()).filter(Boolean);
 
-            ids.forEach(function (id) {
-                var btn = document.querySelector('.vdemo-memo-button[data-demo-id="' + id + '"]');
-                var title = "";
-                var info = "";
-                var genre = "";
-                var genreSlug = "";
-                var audio = "";
-                var badge = "";
-
-                if (btn) {
-                    title = btn.getAttribute("data-demo-title") || "";
-                    info = btn.getAttribute("data-demo-info") || "";
-                    genre = btn.getAttribute("data-demo-genre") || "";
-                    genreSlug = btn.getAttribute("data-demo-genre-slug") || "";
-                    audio = btn.getAttribute("data-demo-audio") || "";
-                    badge = btn.getAttribute("data-demo-badge") || "";
-                }
+            ids.forEach((id) => {
+                const btn = document.querySelector(`.vdemo-memo-button[data-demo-id="${id}"]`);
+                const title = btn ? btn.getAttribute("data-demo-title") || "" : "";
+                const info = btn ? btn.getAttribute("data-demo-info") || "" : "";
+                const genre = btn ? btn.getAttribute("data-demo-genre") || "" : "";
+                const genreSlug = btn ? btn.getAttribute("data-demo-genre-slug") || "" : "";
+                const audio = btn ? btn.getAttribute("data-demo-audio") || "" : "";
+                const badge = btn ? btn.getAttribute("data-demo-badge") || "" : "";
 
                 memoItems[id] = {
-                    title: title,
-                    info: info,
-                    genre: genre,
-                    genreSlug: genreSlug,
-                    audio: audio,
-                    badge: badge
+                    title,
+                    info,
+                    genre,
+                    genreSlug,
+                    audio,
+                    badge,
                 };
             });
 
@@ -1342,47 +1299,70 @@ function styleSelects(nodeList) {
             if (drawer) {
                 openDrawer();
             }
-        } catch (_e) {}
-    }
-
-    document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape") {
-            closeDrawer();
+        } catch (error) {
+            // Ignorieren.
         }
-    });
+    };
 
-    function bindMemoButtonsClicks() {
+    const bindMemoButtonsClicks = () => {
         memoButtons = document.querySelectorAll(".vdemo-memo-button");
-        memoButtons.forEach(function (btn) {
+        memoButtons.forEach((btn) => {
             if (btn.getAttribute("data-vdemo-memo-bound") === "1") {
                 return;
             }
             btn.setAttribute("data-vdemo-memo-bound", "1");
 
-            btn.addEventListener("click", function () {
-                var id = btn.getAttribute("data-demo-id");
-                var title = btn.getAttribute("data-demo-title") || "";
-                var info = btn.getAttribute("data-demo-info") || "";
-                var genre = btn.getAttribute("data-demo-genre") || "";
-                var genreSlug = btn.getAttribute("data-demo-genre-slug") || "";
-                var audio = btn.getAttribute("data-demo-audio") || "";
-                var badge = btn.getAttribute("data-demo-badge") || "";
+            btn.addEventListener("click", () => {
+                const id = btn.getAttribute("data-demo-id");
+                const title = btn.getAttribute("data-demo-title") || "";
+                const info = btn.getAttribute("data-demo-info") || "";
+                const genre = btn.getAttribute("data-demo-genre") || "";
+                const genreSlug = btn.getAttribute("data-demo-genre-slug") || "";
+                const audio = btn.getAttribute("data-demo-audio") || "";
+                const badge = btn.getAttribute("data-demo-badge") || "";
 
-                if (!id) return;
+                if (!id) {
+                    return;
+                }
 
-                var data = {
-                    title: title,
-                    info: info,
-                    genre: genre,
-                    genreSlug: genreSlug,
-                    audio: audio,
-                    badge: badge
+                const data = {
+                    title,
+                    info,
+                    genre,
+                    genreSlug,
+                    audio,
+                    badge,
                 };
 
                 toggleMemo(id, data);
             });
         });
+    };
+
+    filterSelects.forEach((select) => {
+        select.addEventListener("change", applyFilters);
+    });
+
+    if (resetButton) {
+        resetButton.addEventListener("click", () => {
+            filterSelects.forEach((select) => {
+                if (select.multiple) {
+                    Array.from(select.options).forEach((opt) => {
+                        opt.selected = opt.value === "all";
+                    });
+                } else {
+                    select.value = "all";
+                }
+            });
+            applyFilters();
+        });
     }
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            closeDrawer();
+        }
+    });
 
     loadMemosFromStorage();
     styleSelects(filterSelects);
@@ -1399,7 +1379,4 @@ function styleSelects(nodeList) {
     syncMemoButtons();
     hydrateMemosFromUrl();
     buildContactMemoBox();
-
-    // === VDS 2.9.42: Sync Merkliste -> Fluent Forms (Hidden-Feld + HTML-Box) ===
-
 });

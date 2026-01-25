@@ -10,6 +10,25 @@
     box-sizing: border-box;
 }
 
+.vdemo-wrapper button,
+.vdemo-wrapper a,
+.vdemo-wrapper .vdemo-card,
+.vdemo-wrapper .vdemo-filter-chip,
+.vdemo-wrapper .vdemo-badge,
+.vdemo-wrapper .vdemo-subline-info-badge,
+.vdemo-wrapper .vdemo-drawer-info-badge,
+.vdemo-wrapper .vdemo-play-button,
+.vdemo-wrapper .vdemo-page-link,
+.vdemo-wrapper .vdemo-page-next,
+.vdemo-wrapper .vdemo-drawer-toggle,
+.vdemo-wrapper .vdemo-drawer-close,
+.vdemo-wrapper .vdemo-drawer-item-remove,
+.vdemo-wrapper .vdemo-download-mini,
+.vdemo-wrapper .vdemo-memo-mini,
+.vdemo-wrapper .vdemo-reset-button {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
 /* Meta-Reihe über der Filterbar */
 
 .vdemo-filter-shell {
@@ -51,11 +70,11 @@
 }
 
 .vdemo-filter-shell .vdemo-reset-button {
-    background-color: #f8fafc;
-    color: #0f172a;
+    background-color: #1a93ee;
+    color: #ffffff;
     border-radius: 999px;
     padding: 0 18px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #1a93ee;
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
@@ -70,13 +89,13 @@
 }
 
 .vdemo-filter-shell .vdemo-reset-button:hover {
-    background-color: #eef4fb;
-    border-color: #cbd5e1;
+    background-color: #137ecf;
+    border-color: #137ecf;
 }
 
 .vdemo-filter-shell .vdemo-reset-button:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.25);
+    box-shadow: 0 0 0 3px rgba(26, 147, 238, 0.3);
 }
 
 .vdemo-filter-shell .vdemo-filter-row-main {
@@ -497,13 +516,13 @@
 
 .vdemo-subline-info-badge {
     position: relative;
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     border-radius: 999px;
     border: 1px solid #cbd5e1;
     background: #e5f1ff;
     color: #0f172a;
-    font-size: 11px;
+    font-size: 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -517,12 +536,12 @@
 .vdemo-subline-info-badge::before {
     content: "i";
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .vdemo-subline-info-badge-small {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
 }
 
 /* Tooltip – helles Design */
@@ -706,7 +725,7 @@
     font-size: 0.75rem;
     color: #64748b;
     min-width: 42px;
-    text-align: right;
+    text-align: center;
 }
 
 /* Buttons */
@@ -1056,14 +1075,14 @@
 }
 
 .vdemo-drawer-info-badge {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 999px;
     border: 1px solid #cbd5e1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
+    font-size: 10px;
     color: #0f172a;
     position: relative;
     background: #e5f1ff;

@@ -703,12 +703,12 @@ public function enqueue_assets() {
                                     <span class="vdemo-play-icon-play"></span>
                                     <span class="vdemo-play-icon-pause"></span>
                                 </button>
+                                <span class="vdemo-time-label">0:00</span>
                                 <div class="vdemo-progress-wrapper">
                                     <div class="vdemo-progress-track">
                                         <div class="vdemo-progress-fill"></div>
                                     </div>
                                 </div>
-                                <span class="vdemo-time-label">0:00</span>
                                 <?php if (!empty($item['audio_url'])) : ?>
                                     <audio class="vdemo-audio" src="<?php echo esc_url($item['audio_url']); ?>" preload="none"></audio>
                                 <?php endif; ?>
@@ -913,13 +913,13 @@ public function enqueue_assets() {
                 <span class="vdemo-play-icon-pause"></span>
             </button>
 
+            <span class="vdemo-time-label">0:00</span>
             <div class="vdemo-progress-wrapper">
                 <div class="vdemo-progress-track">
                     <div class="vdemo-progress-fill"></div>
                 </div>
             </div>
 
-            <span class="vdemo-time-label">0:00</span>
             <div class="vdemo-standalone-actions">
                 <?php if (!empty($audio_url)) : ?>
                     <a class="vdemo-download-mini" href="<?php echo esc_url($audio_url); ?>" download>

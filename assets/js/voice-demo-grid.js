@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 160);
     }
 
-function renderPagination() {
+    function renderPagination() {
         if (!grid) return;
 
         var allVisible = currentPageCards && currentPageCards.length ? currentPageCards : cards.slice();
@@ -72,7 +72,9 @@ function renderPagination() {
         paginationNav.className = "vdemo-pagination";
         paginationNav.setAttribute("aria-label", "Demos");
 
-        
+        var pagesWrap = document.createElement("div");
+        pagesWrap.className = "vdemo-pagination-pages";
+
         for (var i = 1; i <= totalPages; i++) {
             (function (pageNum) {
                 var link = document.createElement("button");
@@ -80,18 +82,44 @@ function renderPagination() {
                 link.className = "vdemo-page-link";
                 if (pageNum === currentPage) {
                     link.classList.add("vdemo-page-link-active");
-                    link.textContent = String(pageNum);
-                } else {
-                    link.textContent = String(pageNum);
                 }
+                link.textContent = String(pageNum);
                 link.addEventListener("click", function () {
                     changePageWithFade(pageNum, totalPages);
                 });
-                paginationNav.appendChild(link);
+                pagesWrap.appendChild(link);
             })(i);
         }
 
-var afterNode = grid;
+        paginationNav.appendChild(pagesWrap);
+
+        var nextButton = document.createElement("button");
+        nextButton.type = "button";
+        nextButton.className = "vdemo-page-next";
+        nextButton.setAttribute("aria-label", "Nächste Seite");
+        nextButton.disabled = currentPage >= totalPages;
+
+        var nextText = document.createElement("span");
+        nextText.textContent = "NÄCHSTE";
+        nextButton.appendChild(nextText);
+
+        var nextIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        nextIcon.setAttribute("viewBox", "0 0 24 24");
+        nextIcon.setAttribute("aria-hidden", "true");
+        var nextPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        nextPath.setAttribute("d", "M8.293 5.293a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414l-6 6a1 1 0 1 1-1.414-1.414L13.586 12 8.293 6.707a1 1 0 0 1 0-1.414z");
+        nextIcon.appendChild(nextPath);
+        nextButton.appendChild(nextIcon);
+
+        nextButton.addEventListener("click", function () {
+            if (currentPage < totalPages) {
+                changePageWithFade(currentPage + 1, totalPages);
+            }
+        });
+
+        paginationNav.appendChild(nextButton);
+
+        var afterNode = grid;
         if (afterNode && afterNode.parentNode) {
             afterNode.parentNode.insertBefore(paginationNav, afterNode.nextSibling);
         }

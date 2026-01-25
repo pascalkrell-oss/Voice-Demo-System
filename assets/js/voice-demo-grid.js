@@ -936,7 +936,9 @@ filterSelects.forEach(function (select) {
                     playBtn.appendChild(iconPlay);
                     playBtn.appendChild(iconPause);
 
-                    audioRow.appendChild(playBtn);
+                    var time = document.createElement("span");
+                    time.className = "vdemo-time-label";
+                    time.textContent = "0:00";
 
                     var progWrap = document.createElement("div");
                     progWrap.className = "vdemo-progress-wrapper";
@@ -950,17 +952,14 @@ filterSelects.forEach(function (select) {
                     progTrack.appendChild(progFill);
                     progWrap.appendChild(progTrack);
 
-                    var time = document.createElement("span");
-                    time.className = "vdemo-time-label";
-                    time.textContent = "0:00";
-
                     var audioEl = document.createElement("audio");
                     audioEl.className = "vdemo-audio";
                     audioEl.setAttribute("src", audioUrl);
                     audioEl.setAttribute("preload", "none");
 
-                    audioRow.appendChild(progWrap);
+                    audioRow.appendChild(playBtn);
                     audioRow.appendChild(time);
+                    audioRow.appendChild(progWrap);
                     audioRow.appendChild(audioEl);
 
                     card.appendChild(audioRow);

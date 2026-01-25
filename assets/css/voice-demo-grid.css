@@ -1,0 +1,1747 @@
+/* ================================
+   Voice Demo System – Frontend CSS
+   ================================ */
+
+.vdemo-wrapper {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto 3rem auto;
+    padding: 1.5rem 1rem 3rem 1rem;
+    box-sizing: border-box;
+}
+
+/* Meta-Reihe über der Filterbar */
+
+.vdemo-filter-shell {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.vdemo-filter-meta-top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.vdemo-result-label {
+    font-size: 0.85rem;
+    color: #0f1231;
+}
+
+/* Filterbar */
+
+.vdemo-filter-bar {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #d6d9e7;
+    box-shadow: 0 2px 10px rgba(15, 18, 49, 0.06);
+    padding: 0.9rem 1.2rem 1.1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.vdemo-reset-button {
+    border-radius: 999px;
+    border: 1px solid #111827;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: #111827;
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vdemo-reset-button:hover {
+    background-color: #374151;
+    border-color: #374151;
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.vdemo-filter-row-main {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.9rem;
+}
+
+@media (max-width: 1100px) {
+    .vdemo-filter-row-main {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .vdemo-filter-row-main {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .vdemo-filter-row-main {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.vdemo-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.vdemo-filter-label {
+    font-size: 0.75rem;
+    color: #5b6378;
+}
+
+/* Selects / Dropdowns */
+
+.vdemo-select-wrapper {
+    position: relative;
+}
+
+.vdemo-select {
+    width: 100%;
+    padding: 0.5rem 2.2rem 0.5rem 0.9rem;
+    border-radius: 14px;
+    border: 1px solid #c9cfe3;
+    background: #ffffff;
+    font-size: 0.9rem;
+    color: #0f1231;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: 0 4px 14px rgba(15, 18, 49, 0.06);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.vdemo-select-hidden {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.vdemo-select-hover {
+    border-color: #9ccff7;
+    box-shadow: 0 0 0 2px rgba(26, 147, 238, 0.06);
+}
+
+.vdemo-select-focus {
+    border-color: rgba(148, 163, 184, 0.8);
+    box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.35);
+    background-color: #f7fbff;
+}
+
+
+.vdemo-select-icon {
+    position: absolute;
+    right: 0.9rem;
+    top: 50%;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-left: 2px solid #7a88a8;
+    border-bottom: 2px solid #7a88a8;
+    transform-origin: center;
+    transform: translateY(-55%) rotate(-45deg);
+    pointer-events: none;
+}
+
+/* Custom Dropdown (Single + Multi) */
+
+.vdemo-select-wrapper-advanced .vdemo-select-icon {
+    display: none;
+}
+
+.vdemo-multi {
+    position: relative;
+}
+
+.vdemo-multi-toggle {
+    width: 100%;
+    padding: 0.5rem 2.2rem 0.5rem 0.9rem;
+    border-radius: 14px;
+    border: 1px solid #c9cfe3;
+    background: #ffffff;
+    font-size: 0.9rem;
+    color: #0f1231;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(15, 18, 49, 0.06);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    position: relative;
+}
+
+.vdemo-multi-toggle::after {
+    content: "";
+    position: absolute;
+    right: 0.9rem;
+    top: 50%;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-left: 2px solid #7a88a8;
+    border-bottom: 2px solid #7a88a8;
+    transform-origin: center;
+    transform: translateY(-55%) rotate(-45deg);
+    pointer-events: none;
+}
+
+.vdemo-multi-toggle:hover {
+    border-color: #9ca3af;
+    box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.25);
+}
+
+/* Hover-Style beibehalten, solange Menü offen ist */
+.vdemo-multi-open .vdemo-multi-toggle {
+    border-color: #6b7280;
+    box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.35);
+    background-color: #f9fafb;
+}
+
+.vdemo-multi-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: 100%;
+    max-height: 230px;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #d6d9e7;
+    box-shadow: 0 12px 30px rgba(15, 18, 49, 0.18);
+    padding: 4px 0;
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+    pointer-events: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    z-index: 30;
+}
+
+.vdemo-multi-open .vdemo-multi-menu {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.vdemo-multi-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    color: #111827;
+    cursor: pointer;
+}
+
+.vdemo-multi-option:hover {
+    background: #f3f4ff;
+}
+
+.vdemo-multi-checkbox {
+    margin: 0;
+}
+
+.vdemo-single-option {
+    display: flex;
+    align-items: center;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    color: #111827;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    width: 100%;
+    text-align: left;
+}
+
+.vdemo-single-option:hover {
+    background: #f3f4ff;
+}
+
+/* Aktive Filter – Bar */
+
+.vdemo-active-filters {
+    margin: 0.9rem auto 1.3rem auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    text-align: left;
+    width: 100%;
+    padding: 14px 10px;
+    border-radius: var(--has-classic-forms, var(--theme-form-field-border-radius, 3px));
+    background: #f7f9ff;
+    border: 1px dashed #d3def1;
+}
+
+
+.vdemo-active-filters-empty {
+    display: none;
+}
+
+.vdemo-active-filters-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4b5563;
+    white-space: nowrap;
+}
+
+.vdemo-active-filters-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    justify-content: flex-start;
+}
+
+.vdemo-filter-chip {
+    border-radius: 999px;
+    border: 1px solid #d1def7;
+    background: #e5f1ff;
+    color: #1f2933;
+    font-size: 0.78rem;
+    padding: 3px 9px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 6px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.vdemo-filter-chip:hover {
+    background: #d7e7ff;
+    border-color: #8ccaf5;
+    color: #111827;
+}
+
+.vdemo-filter-chip-label {
+    white-space: nowrap;
+}
+
+.vdemo-filter-chip-close {
+    font-size: 0.82rem;
+    line-height: 1;
+}
+
+/* Grid */
+
+.vdemo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.26s ease, transform 0.26s ease;
+}
+
+.vdemo-grid-fade-out {
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+}
+
+.vdemo-grid-fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+@media (max-width: 1024px) {
+    .vdemo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .vdemo-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Demo Card */
+
+.vdemo-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%);
+    border-radius: 14px;
+    border: 1px solid #d6d9e7;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 10px 24px rgba(15, 18, 49, 0.06);
+    padding: 1rem 1.1rem 0.9rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: visible;
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+        box-shadow 0.28s ease,
+        border-color 0.28s ease,
+        background-color 0.28s ease,
+        opacity 0.26s ease,
+        transform 0.26s ease;
+}
+
+.vdemo-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top, rgba(26, 147, 238, 0.1), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+}
+
+.vdemo-card:hover {
+    box-shadow: 0 4px 14px rgba(15, 18, 49, 0.12);
+    border-color: #8ccaf5;
+    background-color: #f8fbff;
+    transform: translateY(-1px);
+}
+
+.vdemo-card:hover::before {
+    opacity: 1;
+}
+
+.vdemo-card-hidden {
+    display: none;
+}
+
+/* Card-Inhalt */
+
+.vdemo-card-inner {
+    display:flex;
+    flex-direction:column;
+    gap:0.5rem; /* leicht geringerer Abstand zwischen Header und Player */
+}
+
+.vdemo-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vdemo-card-title-wrap {
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.45rem;
+}
+
+.vdemo-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #0f1231;
+    flex: 1;
+    line-height: 1.25;
+    position: relative;
+    top: 1px;
+}
+
+/* Badge mit Demo-ID */
+
+.vdemo-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid #c4d7ff;
+    background: #e5f1ff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #1f2937;
+    white-space: nowrap;
+    margin-right: 0.3rem;
+    line-height: 1;
+    position: relative;
+    top: 1px; /* leicht nach unten gezogen, um exakt auf Titellinie zu sitzen */
+}
+
+.vdemo-badge::before {
+    content: "ID ";
+}
+
+.vdemo-badge-inline {
+    margin-right: 0.4rem;
+}
+
+/* Eigenschaften Tooltip in Card */
+
+.vdemo-subline-info-badge {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    background: #e5f1ff;
+    color: #0f172a;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    padding: 0;
+    outline: none;
+    flex-shrink: 0;
+    top: 1px; /* leicht nach unten gezogen, um exakt auf Titellinie zu sitzen */
+}
+
+.vdemo-subline-info-badge::before {
+    content: "i";
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.vdemo-subline-info-badge-small {
+    width: 20px;
+    height: 20px;
+}
+
+/* Tooltip – helles Design */
+
+.vdemo-subline-info-tooltip {
+    position: absolute;
+    right: 0;
+    bottom: 120%;
+    transform: translateY(0);
+    background: #f9fbff;
+    color: #111827;
+    padding: 6px 8px;
+    border-radius: 8px;
+    white-space: normal;
+    font-size: 11px;
+    line-height: 1.3;
+    max-width: 260px;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 12px 26px rgba(15, 18, 49, 0.12);
+    border: 1px solid #d1def7;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 10000;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.vdemo-subline-info-badge:hover .vdemo-subline-info-tooltip {
+    position: absolute;
+    right: 0;
+    bottom: 120%;
+    transform: translateY(0);
+    background: #f9fbff;
+    color: #111827;
+    padding: 6px 8px;
+    border-radius: 8px;
+    white-space: normal;
+    font-size: 11px;
+    line-height: 1.3;
+    max-width: 260px;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 12px 26px rgba(15, 18, 49, 0.12);
+    border: 1px solid #d1def7;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 10000;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.vdemo-subline-chip {
+    font-size: 0.72rem;
+    color: #1f2937;
+    background: rgba(219, 234, 254, 0.9);
+    border-radius: 999px;
+    padding: 2px 7px;
+    white-space: nowrap;
+}
+
+/* Audio Player – Layout */
+
+.vdemo-card-audio,
+
+
+..vdemo-card-audio-standalone {
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:0.55rem;
+}
+
+
+/* Player Button – Hintergrund rgb(15,18,49), Icon weiß */
+
+.vdemo-play-button {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: #111827;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    box-shadow: none;
+    outline: none;
+    transition: background-color 0.18s ease;
+}
+
+.vdemo-play-button:hover {
+    background-color: #374151;
+}
+
+
+.vdemo-play-icon-play,
+.vdemo-play-icon-pause {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    transform: translate(-50%, -50%);
+    display: block;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+/* Play: bereitgestelltes SVG (auf weiß getrimmt) */
+
+.vdemo-play-icon-play {
+    background-image: url("https://dev.pascal-krell.de/wp-content/uploads/2025/08/play-icon.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 1;
+    filter: brightness(0) invert(1);
+}
+
+/* Pause: zwei weiße Balken */
+
+.vdemo-play-icon-pause {
+    opacity: 0;
+}
+
+.vdemo-play-icon-pause::before,
+.vdemo-play-icon-pause::after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    width: 4px;
+    border-radius: 2px;
+    background: #ffffff;
+}
+
+.vdemo-play-icon-pause::before {
+    left: 6px;
+}
+
+.vdemo-play-icon-pause::after {
+    right: 6px;
+}
+
+/* Hover: nur Icon-Scaling */
+
+.vdemo-play-button:hover .vdemo-play-icon-play,
+.vdemo-play-button:hover .vdemo-play-icon-pause {
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+.vdemo-play-button:active .vdemo-play-icon-play,
+.vdemo-play-button:active .vdemo-play-icon-pause {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+/* Pause-Icon bei aktivem Player etwas größer */
+
+.vdemo-play-button-active .vdemo-play-icon-pause {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.16);
+}
+
+.vdemo-play-button-active .vdemo-play-icon-play {
+    opacity: 0;
+}
+
+/* Drawer-Player noch dezenter */
+
+
+
+
+
+
+
+/* Standalone minimalistisch */
+
+.vdemo-card-audio-standalone .vdemo-play-button {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: #111827;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    box-shadow: none;
+    outline: none;
+    transition: background-color 0.18s ease;
+}
+
+.vdemo-card-audio-standalone .vdemo-play-icon-play,
+.vdemo-card-audio-standalone .vdemo-play-icon-pause {
+    width: 20px;
+    height: 20px;
+}
+
+/* Progressbar */
+
+.vdemo-progress-wrapper {
+    width: 100%;
+}
+
+.vdemo-progress-track {
+    width: 100%;
+    height:   6px;
+    border-radius: 999px;
+    background: #eef2ff;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px rgba(210, 216, 235, 0.6), inset 1px 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+.vdemo-progress-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #1a93ee, #6bbbf6);
+    transition: width 0.08s linear;
+}
+
+.vdemo-time-label {
+    font-size: 0.8rem;
+    color: #1a2b4a;
+}
+
+
+/* Zeit im Drawer-Player in der Merkliste immer anzeigen */
+
+
+
+
+/* Buttons in den Cards */
+
+.vdemo-btn {
+    flex: 1;
+    border-radius: 999px;
+    padding: 6px 11px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    box-shadow: none;
+}
+
+.vdemo-btn-secondary {
+    background: #ffffff;
+    color: #0f1231;
+    border-color: #c9cfe3;
+}
+
+.vdemo-btn-secondary:hover {
+    border-color: #8ccaf5;
+    background-color: #f7fbff;
+}
+
+.vdemo-btn-primary {
+    background: #1a93ee;
+    border-color: #1a93ee;
+    color: #ffffff;
+}
+
+.vdemo-btn-primary:hover {
+    background: #0066b3;
+    border-color: #0066b3;
+}
+
+/* Merken-Button */
+
+.vdemo-memo-label {
+    font-size: 13px;
+}
+
+.vdemo-memo-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.vdemo-memo-button-active {
+    background: #e8f4ff;
+    color: #0b4570;
+    border-color: #8ccaf5;
+}
+
+.vdemo-memo-button-active:hover {
+    background: #dff0ff;
+    border-color: #74bff0;
+    color: #083a61;
+}
+
+/* Standalone-Player Kartenstil */
+
+.vdemo-standalone-player {
+  padding:8px 10px 0 10px;
+  border-radius:14px;
+  border:1px solid #d6d9e7; /* wie Demo Cards */
+  background:linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%);
+  display:flex;
+  flex-direction:column;
+  gap:0.35rem;
+  box-shadow:0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+
+/* Standalone: Titelzeile */
+
+.vdemo-standalone-inline-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+}
+
+.vdemo-standalone-audio-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Mini-Merken-Button für Standalone */
+
+.vdemo-memo-mini {
+    grid-column: 2 / 3;
+    justify-self: flex-end;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    padding: 0;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vdemo-memo-mini-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vdemo-memo-mini-icon .vdemo-icon-svg {
+    width: 14px;
+    height: 14px;
+}
+
+.vdemo-memo-mini:hover {
+    border-color: #8ccaf5;
+    background: #f7fbff;
+}
+
+/* Tooltip für Standalone Merken */
+
+.vdemo-memo-mini-tooltip {
+    position: absolute;
+    left: 50%;
+    bottom: 115%;
+    transform: translate(-50%, 4px);
+    background: #111827;
+    color: #f9fafb;
+    padding: 4px 7px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    z-index: 30;
+}
+
+.vdemo-memo-mini:hover .vdemo-memo-mini-tooltip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.vdemo-memo-mini.vdemo-memo-button-active {
+    background: #e5f1ff;
+    border-color: #8ccaf5;
+}
+
+.vdemo-memo-mini.vdemo-memo-button-active .vdemo-memo-mini-icon .vdemo-icon-svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Drawer-Toggle (Gemerkte Demos) */
+
+.vdemo-drawer-toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1a93ee;
+    color: #ffffff;
+    border-radius: 999px;
+    border: 0;
+    padding: 12px 16px;
+    box-shadow: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+}
+
+.vdemo-drawer-toggle.vdemo-has-items {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.vdemo-drawer-toggle:hover {
+    background-color: #0066b3;
+}
+
+.vdemo-drawer-toggle-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    display: none;
+}
+
+.vdemo-drawer-toggle-icon {
+    display: inline-flex;
+}
+
+.vdemo-icon-svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.vdemo-drawer-toggle-label {
+    font-weight: 500;
+}
+
+.vdemo-drawer-count {
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #0b3a66;
+    font-weight: 800;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pop-Effekt wenn erste Demo gemerkt wurde */
+
+.vdemo-drawer-toggle-pop {
+    animation: vdemo-pop 0.6s ease;
+}
+
+@keyframes vdemo-pop {
+    0% {
+        transform: translateY(8px) scale(0.9);
+        opacity: 0;
+    }
+    60% {
+        transform: translateY(0) scale(1.04);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Drawer rechts */
+
+.vdemo-drawer {
+    position: fixed;
+    top: 0;
+    right: -360px;
+    height: 100vh;
+    width: 360px;
+    max-width: 100%;
+    background: #ffffff;
+    border-left: 1px solid #d6d9e7;
+    box-shadow: -12px 0 28px rgba(15, 18, 49, 0.12);
+    display: flex;
+    flex-direction: column;
+    z-index: 9998;
+    transition: right 0.22s ease;
+}
+
+.vdemo-drawer-open {
+    right: 0;
+}
+
+.vdemo-drawer-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e5e8f3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vdemo-drawer-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #0f1231;
+    font-weight: 500;
+}
+
+.vdemo-drawer-close {
+    border-radius: 999px;
+    border: 1px solid #111827;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: #111827;
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.vdemo-drawer-close:hover {
+    background-color: #374151;
+    border-color: #374151;
+}
+
+/* Drawer Body & Liste */
+
+.vdemo-drawer-body {
+    padding: 10px 12px 0 12px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: visible;
+}
+
+.vdemo-drawer-list-wrap {
+    padding-bottom: 12px;
+}
+
+.vdemo-drawer-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+}
+
+/* Gruppen nach Genre */
+
+.vdemo-drawer-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.vdemo-drawer-group-header-strip {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #0f172a;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #e5f1ff;
+    border: 1px solid #c4d7ff;
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+}
+
+.vdemo-drawer-group-items {
+    display: grid;
+    gap: 8px;
+}
+
+/* Einzelne gemerkte Demo */
+
+.vdemo-drawer-item {
+    padding: 7px 8px;
+    border-radius: 12px;
+    border: 1px solid #e0e5f2;
+    background: #fbfcff;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    overflow: visible;
+}
+
+.vdemo-drawer-item-title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vdemo-drawer-item-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #0f1231;
+}
+
+.vdemo-drawer-item-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+}
+
+/* Info-Badge mit Tooltip (Merkliste) */
+
+.vdemo-drawer-info-badge {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    background: #e5f1ff;
+    color: #0f172a;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    margin-right: 2px;
+}
+
+.vdemo-drawer-info-badge::before {
+    content: "i";
+    font-weight: 700;
+    font-size: 13px;
+}
+
+..vdemo-drawer-info-tooltip {
+    position: absolute;
+    left: 50%;
+    top: 115%;
+    transform: translate(-50%, 0);
+    background: #f9fbff;
+    color: #111827;
+    padding: 6px 8px;
+    border-radius: 8px;
+    white-space: normal;
+    font-size: 11px;
+    line-height: 1.3;
+    max-width: 260px;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 12px 26px rgba(15, 18, 49, 0.12);
+    border: 1px solid #d1def7;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 10000;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.vdemo-drawer-info-badge:hover .vdemo-drawer-info-tooltip {
+    position: absolute;
+    left: 50%;
+    top: 115%;
+    transform: translate(-50%, 0);
+    background: #f9fbff;
+    color: #111827;
+    padding: 6px 8px;
+    border-radius: 8px;
+    white-space: normal;
+    font-size: 11px;
+    line-height: 1.3;
+    max-width: 260px;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 12px 26px rgba(15, 18, 49, 0.12);
+    border: 1px solid #d1def7;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 10000;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.vdemo-drawer-info-chip {
+    font-size: 0.72rem;
+    color: #1f2937;
+    background: rgba(219, 234, 254, 0.9);
+    border-radius: 999px;
+    padding: 2px 7px;
+    white-space: nowrap;
+}
+
+.vdemo-drawer-item-remove {
+    border: none;
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 0.68rem;
+    cursor: pointer;
+    background: rgba(248, 113, 113, 0.16);
+    color: #b91c1c;
+    transition: background-color 0.2s ease;
+}
+
+.vdemo-drawer-item-remove:hover {
+    background: rgba(248, 113, 113, 0.28);
+}
+
+/* Drawer Footer – jetzt helles UX-Layout */
+
+.vdemo-drawer-footer {
+    border-top: 1px solid #e5e8f3;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.vdemo-drawer-footer-inner {
+    padding: 10px 12px 12px 12px;
+    background: #f5f7ff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.vdemo-drawer-footer-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.vdemo-drawer-btn {
+    border-radius: 999px;
+    padding: 0.6rem 1.2rem; /* etwas größer */
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #111827;
+    text-align: center;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.vdemo-drawer-btn-primary {
+    background: #1a93ee;
+    border-color: #1a93ee;
+    color: #ffffff;
+}
+
+.vdemo-drawer-btn-primary:hover {
+    background: #0066b3;
+    border-color: #0066b3;
+}
+
+.vdemo-drawer-btn-ghost {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: #111827;
+}
+
+.vdemo-drawer-btn-ghost:hover {
+    background: #f7fbff;
+    border-color: #8ccaf5;
+}
+
+.vdemo-drawer-btn-danger {
+    background: #ffffff;
+    border-color: rgba(248, 113, 113, 0.7);
+    color: #b91c1c;
+}
+
+.vdemo-drawer-btn-danger:hover {
+    background: rgba(248, 113, 113, 0.12);
+    border-color: rgba(220, 38, 38, 0.9);
+}
+
+/* Info-Box im hellen Bereich */
+
+.vdemo-drawer-info-box {
+    font-size: 0.78rem;
+    color: #111827;
+    background: linear-gradient(135deg, rgba(219, 234, 254, 0.95), rgba(239, 246, 255, 0.98));
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    padding: 0.65rem 0.75rem;
+}
+
+.vdemo-drawer-info-box strong {
+    display: block;
+    margin-bottom: 0.23rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.vdemo-drawer-info-box p {
+    margin: 0;
+}
+
+/* Screenreader-only Text (falls noch irgendwo nötig) */
+
+.vdemo-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+
+
+/* === VDS 2.9.37: Kontaktformular – Box "Gemerkte Demos" unter dem Nachrichtenfeld === */
+.vdemo-contact-memos-wrap{
+  margin-top:10px !important;
+  margin-bottom:10px !important;
+  border:0 !important;
+  background:transparent !important;
+  border-radius:0 !important;
+  padding:0 !important;
+}
+.vdemo-contact-memos-title{
+  font-size:15px !important;
+  font-weight:400 !important;
+  margin:4px 0 4px 0 !important;
+}
+.vdemo-contact-memos{
+  border:1px dashed #d3def1 !important;
+  background:#f7f9ff !important;
+  border-radius:var(--has-classic-forms, var(--theme-form-field-border-radius, 3px)) !important;
+  padding:14px 10px 14px 10px !important;
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  gap:6px !important;
+}
+.vdemo-contact-chip{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  padding:5px 11px !important;
+  border-radius:999px !important;
+  border:1px solid #d0ddf5 !important;
+  background:#e8f0ff !important;
+  font-size:13px !important;
+  line-height:1.2 !important;
+}
+.vdemo-contact-chip-remove{
+  appearance:none !important;
+  border:0 !important;
+  background:transparent !important;
+  cursor:pointer !important;
+  font-size:13px !important;
+  line-height:1 !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+.vdemo-contact-memos-hint{
+  flex-basis:100% !important;
+  margin-top:4px !important;
+  font-size:11px !important;
+  color:#5c6678 !important;
+  opacity:0.9 !important;
+}
+/* === Hardcode-Finetuning Demo-Card-Header & Abstände (2.9.53) === */
+
+/* Header: ID-Badge, Titel und Info-Badge streng in einer Linie zentrieren */
+.vdemo-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center !important;
+}
+
+/* Linker Block: ID-Bubble + Titel */
+.vdemo-card-title-wrap {
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.45rem;
+}
+
+/* Titel optisch auf Linie mit den Badges bringen */
+.vdemo-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #0f1231;
+  flex: 1;
+  line-height: 1.2 !important;
+  position: relative;
+  top: 1px; /* feine Justierung, Titel mittig zwischen ID- und Info-Badge */
+}
+
+/* Vertikale Abstände in der Demo-Card bewusst steuern */
+.vdemo-card-inner {
+    display:flex;
+    flex-direction:column;
+    gap:0.5rem; /* leicht geringerer Abstand zwischen Header und Player */
+}
+
+/* Abstand Header -> Player etwas größer (ca. +5px) */
+.vdemo-card-header {
+  margin-bottom: 0.7rem !important;
+}
+
+/* Abstand Player -> Buttons weiterhin angenehm groß */
+.vdemo-card-audio {
+  margin-top: 0.05rem !important;
+  margin-bottom: 0.95rem !important;
+}
+
+/* Footer selbst braucht keinen Extra-Margin nach oben */
+.vdemo-card-footer {
+    display:flex;
+    gap:0.75rem;
+    margin-top:-0.1rem; /* etwas dichter an den Player gerückt */
+}
+
+
+/* Pagination & Karten-Sichtbarkeit */
+.vdemo-card-filter-hidden,
+.vdemo-card-page-hidden {
+  display: none;
+}
+
+.vdemo-pagination {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.vdemo-page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 500;
+    text-decoration: none;
+    background: transparent;
+    color: #1f2937;
+    cursor: pointer;
+    transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+}
+
+
+.vdemo-page-link:hover:not(.vdemo-page-link-active) {
+  background-color:#374151;
+  border-color:#374151;
+  color:#ffffff;
+}
+
+.vdemo-page-link-active,
+.vdemo-page-link-active:hover {
+  background-color:#111827;
+  border-color:#111827;
+  color:#ffffff;
+}
+
+
+
+
+
+.vdemo-page-next {
+  margin-left: 0.3rem;
+  font-weight: 600;
+}
+
+.vdemo-pagination .vdemo-btn {
+  flex: 0;
+}
+
+.vdemo-title { margin-block-end: 0 !important; }
+
+
+
+/* Drawer: Progress-Balken leicht nach rechts verschoben, damit er zwischen Play-Button und Zeitangabe zentrierter wirkt */
+
+
+
+/* Tooltip sichtbarkeit: einfache Hover-Regeln überschreiben ältere Styles */
+.vdemo-subline-info-badge:hover .vdemo-subline-info-tooltip {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+.vdemo-drawer-info-badge:hover .vdemo-drawer-info-tooltip {
+    opacity: 1;
+    transform: translate(-50%, 2px);
+}
+
+
+/* Drawer: Info-Bubble und Tooltip verstecken (nur in der Merkliste, nicht in den Cards) */
+.vdemo-drawer-info-badge,
+.vdemo-drawer-info-tooltip {
+    display: none !important;
+}
+
+
+/* Drawer: Zeitangabe rechtsbündig neben der Fortschrittsleiste */
+
+
+
+
+
+
+
+
+
+/* Einheitliches Layout für Card- und Drawer-Audio: 3-Spalten-Grid */
+.vdemo-card-audio,
+.vdemo-drawer-audio {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.7rem;
+    padding-top: 0;
+}
+
+
+.vdemo-page-link:hover:not(.vdemo-page-link-active) {
+    background-color: #ffffff;
+    border-color: rgb(15, 18, 49);
+    color: rgb(15, 18, 49);
+}
+
+
+.vdemo-drawer-audio .vdemo-time-label {
+    display:inline-block;
+    text-align:right;
+    min-width:2.6rem;
+    font-size:0.8rem;
+    color:#1a2b4a;
+    margin-left:-10px;
+}
+
+
+.vdemo-drawer-btn-ghost,
+.vdemo-drawer-btn-danger {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    font-size: 0.88rem;
+}
+
+
+/* Kontaktformular: äußeres Feld neutralisieren, Gestaltung übernimmt .vdemo-contact-memos */
+.demo-memo-field {
+  border: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+
+@keyframes vdemo-drawer-item-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vdemo-drawer-item--new {
+  animation: vdemo-drawer-item-fade 0.45s ease-out;
+}
+
+
+/* Standalone: Info-Badge ausblenden */
+.vdemo-standalone-player .vdemo-subline-info-badge-small{
+  display:none !important;
+}
+
+/* Download-Bubble wie Merken-Badge */
+..vdemo-download-mini{
+  width:28px;
+  height:28px;
+  border-radius:999px;
+  border:1px solid #c9cfe3;
+  background:#ffffff;
+  padding:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+.vdemo-download-mini:hover{
+  border-color:#8ccaf5;
+  background:#f7fbff;
+}
+
+.vdemo-download-mini .vdemo-icon-svg{
+  width:14px;
+  height:14px;
+  fill:#111827;
+}
+
+
+.vdemo-standalone-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:0.75rem;
+}
+
+.vdemo-standalone-header-left {
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+  min-width:0;
+}
+
+.vdemo-standalone-header-right {
+  display:flex;
+  align-items:center;
+  gap:0.35rem;
+}
+
+
+@media (max-width: 640px) {
+  .vdemo-standalone-player {
+    padding:8px 10px 4px 10px;
+    gap:0.3rem;
+  }
+
+  .vdemo-standalone-header {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.35rem;
+  }
+
+  .vdemo-standalone-header-left {
+    flex-wrap: wrap;
+  }
+
+  .vdemo-standalone-header-right {
+    align-self: flex-start;
+  }
+
+  .vdemo-standalone-audio-title {
+    font-size: 16px;
+    white-space: normal;
+  }
+
+  .vdemo-card-audio-standalone {
+    grid-template-columns: auto minmax(0,1fr) auto;
+    gap: 0.4rem;
+  }
+}
+
+
+/* Nur Standalone-Player anpassen, Grid bleibt unberührt */
+
+/* Info-Badge im Standalone ausblenden */
+.vdemo-standalone-player .vdemo-subline-info-badge {
+  display: none;
+}
+
+/* Standalone-Karte als Positionierungs-Container */
+.vdemo-standalone-player {
+  position: relative;
+}
+
+/* Download-Icon oben rechts im Standalone */
+.vdemo-standalone-player .vdemo-download-mini {
+  position: absolute;
+  top: 10px;
+  right: 38px; /* etwas Abstand zum Merken-Icon */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Merken-Icon ganz rechts daneben */
+.vdemo-standalone-player .vdemo-memo-mini {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Icons im Standalone etwas kleiner und sauber */
+.vdemo-standalone-player .vdemo-download-mini .vdemo-icon-svg,
+.vdemo-standalone-player .vdemo-memo-mini .vdemo-icon-svg {
+  width: 18px;
+  height: 18px;
+}
+
+
+/* Standalone-Player: Merken-Icon bei aktivem Zustand ohne Rand, nur Icon blau */
+.vdemo-standalone-player .vdemo-memo-mini {
+    border: none;
+    background: transparent;
+}
+
+.vdemo-standalone-player .vdemo-memo-button.vdemo-memo-button-active {
+    border: none;
+    background: transparent;
+}
+
+.vdemo-standalone-player .vdemo-memo-button.vdemo-memo-button-active .vdemo-icon-svg,
+.vdemo-standalone-player .vdemo-memo-button.vdemo-memo-button-active .vdemo-memo-mini-icon .vdemo-icon-svg {
+    fill: #1a93ee;
+    stroke: #1a93ee;
+}

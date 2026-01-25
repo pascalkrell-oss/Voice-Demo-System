@@ -263,6 +263,64 @@
     justify-content: flex-start;
 }
 
+/* Kontaktformular: Gemerkte Demos */
+
+.vdemo-contact-memos-wrap {
+    margin-top: 0.85rem;
+    padding: 14px 12px;
+    border-radius: var(--has-classic-forms, var(--theme-form-field-border-radius, 3px));
+    background: #f7f9ff;
+    border: 1px dashed #d3def1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.vdemo-contact-memos-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.vdemo-contact-memos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    align-items: center;
+}
+
+.vdemo-contact-chip {
+    border-radius: 999px;
+    border: 1px solid #d1def7;
+    background: #e5f1ff;
+    color: #1f2933;
+    font-size: 0.78rem;
+    padding: 3px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.2;
+}
+
+.vdemo-contact-chip-remove {
+    border: none;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1;
+    padding: 0;
+}
+
+.vdemo-contact-memos-hint {
+    font-size: 0.75rem;
+    color: #4b5563;
+    line-height: 1.35;
+    margin-top: 0.4rem;
+    width: 100%;
+    flex-basis: 100%;
+}
+
 .vdemo-filter-chip {
     border-radius: 999px;
     border: 1px solid #d1def7;
@@ -858,6 +916,7 @@
 .vdemo-drawer-body {
     flex: 1;
     overflow-y: auto;
+    overflow-x: visible;
     padding: 1rem 1.5rem;
 }
 
@@ -900,6 +959,7 @@
     flex-direction: column;
     gap: 0.6rem;
     transition: opacity 0.24s ease, transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    position: relative;
 }
 
 .vdemo-drawer-item--new {
@@ -939,6 +999,7 @@
     color: #0f172a;
     position: relative;
     background: #e5f1ff;
+    z-index: 2;
 }
 
 .vdemo-drawer-info-badge::before {
@@ -956,13 +1017,13 @@
     border-radius: 8px;
     padding: 6px 8px;
     min-width: 140px;
-    z-index: 5;
     box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
     opacity: 0;
     pointer-events: none;
     transform: translateY(0);
     transition: opacity 0.2s ease, transform 0.2s ease;
     font-size: 0.75rem;
+    z-index: 80;
 }
 
 .vdemo-drawer-info-badge:hover .vdemo-drawer-info-tooltip {
@@ -1122,7 +1183,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .vdemo-standalone-header-left {
@@ -1145,6 +1206,20 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.vdemo-standalone-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: 0.35rem;
+}
+
+.vdemo-standalone-actions .vdemo-download-mini,
+.vdemo-standalone-actions .vdemo-memo-mini {
+    width: 28px;
+    height: 28px;
+    box-shadow: none;
 }
 
 .vdemo-download-mini {
@@ -1220,10 +1295,10 @@
 }
 
 .vdemo-card-audio-standalone {
-    padding: 0.85rem 1rem;
-    border-radius: 14px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border: none;
 }
 
 /* Pagination, Drawer, Standalone etc. */

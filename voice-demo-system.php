@@ -904,6 +904,7 @@ public function enqueue_assets() {
                         </span>
                     </button>
                 <?php endif; ?>
+                <span class="vdemo-standalone-audio-title"><?php echo esc_html($title); ?></span>
             </div>
         </div>
 

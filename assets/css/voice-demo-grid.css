@@ -1275,9 +1275,20 @@
 
 .vdemo-standalone-header-left {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
     min-width: 0;
+}
+
+.vdemo-standalone-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
 }
 
 .vdemo-standalone-audio-title {
@@ -1389,10 +1400,10 @@
 }
 
 .vdemo-card-audio-standalone {
-    padding: 0.35rem 0.6rem;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #f9fbff 0%, #f3f6fb 100%);
-    border: 1px solid #eef2f7;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border: none;
 }
 
 /* Pagination, Drawer, Standalone etc. */

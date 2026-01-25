@@ -554,6 +554,11 @@
     transform: none;
 }
 
+.vdemo-play-button-active:hover {
+    background: #0066b3;
+    border-color: #0066b3;
+}
+
 .vdemo-play-button-active {
     background: #1a93ee;
     border-color: #1a93ee;
@@ -565,18 +570,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 12px;
-    height: 12px;
+    width: 16px;
+    height: 16px;
     position: relative;
 }
 
-.vdemo-play-icon-play::before {
-    content: "";
-    border-left: 11px solid currentColor;
-    border-top: 7px solid transparent;
-    border-bottom: 7px solid transparent;
-    display: block;
-    margin-left: 2px;
+.vdemo-play-icon-play {
+    background-color: currentColor;
+    -webkit-mask: url("https://dev.pascal-krell.de/wp-content/uploads/2025/08/play-icon.svg") center / contain no-repeat;
+    mask: url("https://dev.pascal-krell.de/wp-content/uploads/2025/08/play-icon.svg") center / contain no-repeat;
 }
 
 .vdemo-play-icon-pause::before,
@@ -638,16 +640,15 @@
 /* Buttons */
 
 .vdemo-card-footer {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.6rem;
+    display: flex;
+    gap: 0;
     margin-top: 0.75rem;
     width: 100%;
 }
 
 .vdemo-btn {
-    border-radius: 999px;
-    border: 1px solid transparent;
+    border-radius: 0;
+    border: 1px solid #e2e8f0;
     padding: 0.45rem 0.95rem;
     font-size: 0.78rem;
     font-weight: 600;
@@ -659,6 +660,20 @@
     text-decoration: none;
     line-height: 1;
     width: 100%;
+}
+
+.vdemo-card-footer .vdemo-btn:first-child {
+    border-top-left-radius: 999px;
+    border-bottom-left-radius: 999px;
+}
+
+.vdemo-card-footer .vdemo-btn:last-child {
+    border-top-right-radius: 999px;
+    border-bottom-right-radius: 999px;
+}
+
+.vdemo-card-footer .vdemo-btn + .vdemo-btn {
+    border-left: 1px solid #d9e2ef;
 }
 
 .vdemo-btn-primary {
@@ -676,7 +691,7 @@
 .vdemo-btn-secondary {
     background: #ffffff;
     color: #111827;
-    border-color: #cbd5e1;
+    border-color: #e2e8f0;
 }
 
 .vdemo-btn-secondary:hover {
@@ -685,13 +700,14 @@
 }
 
 .vdemo-card-footer .vdemo-btn:only-child {
-    grid-column: 1 / -1;
+    border-radius: 999px;
 }
 
 .vdemo-memo-button-active {
     background: #1a93ee;
     border-color: #1a93ee;
     color: #ffffff;
+    box-shadow: none;
 }
 
 /* Pagination */
@@ -714,7 +730,9 @@
 }
 
 .vdemo-page-link:hover {
-    background: #f3f4f6;
+    background: #e8f1ff;
+    border-color: #0066b3;
+    color: #0066b3;
 }
 
 .vdemo-page-link-active {
@@ -740,7 +758,7 @@
     align-items: center;
     gap: 0.6rem;
     cursor: pointer;
-    box-shadow: 0 12px 24px rgba(26, 147, 238, 0.3);
+    box-shadow: none;
     font-weight: 600;
     font-size: 0.8rem;
     z-index: 40;
@@ -820,13 +838,19 @@
 }
 
 .vdemo-drawer-close {
-    background: #e2e8f0;
+    background: #e8f1ff;
     border: none;
-    color: #0f172a;
+    color: #0b3760;
     border-radius: 999px;
     padding: 0.35rem 0.85rem;
     cursor: pointer;
     font-size: 0.75rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.vdemo-drawer-close:hover {
+    background: #d7e9ff;
+    color: #0a2b4f;
 }
 
 .vdemo-drawer-body {
@@ -979,15 +1003,14 @@
 }
 
 .vdemo-drawer-footer-buttons {
-    display: grid;
-    gap: 0.6rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    gap: 0;
     width: 100%;
 }
 
 .vdemo-drawer-btn {
-    border-radius: 999px;
-    border: 1px solid transparent;
+    border-radius: 0;
+    border: 1px solid #e2e8f0;
     padding: 0.5rem 0.85rem;
     font-size: 0.75rem;
     cursor: pointer;
@@ -999,6 +1022,20 @@
     width: 100%;
 }
 
+.vdemo-drawer-footer-buttons .vdemo-drawer-btn:first-child {
+    border-top-left-radius: 999px;
+    border-bottom-left-radius: 999px;
+}
+
+.vdemo-drawer-footer-buttons .vdemo-drawer-btn:last-child {
+    border-top-right-radius: 999px;
+    border-bottom-right-radius: 999px;
+}
+
+.vdemo-drawer-footer-buttons .vdemo-drawer-btn + .vdemo-drawer-btn {
+    border-left: 1px solid #d9e2ef;
+}
+
 .vdemo-drawer-btn-primary {
     background: #1a93ee;
     color: #ffffff;
@@ -1007,7 +1044,7 @@
 .vdemo-drawer-btn-ghost {
     background: #ffffff;
     color: #0f172a;
-    border-color: #cbd5e1;
+    border-color: #e2e8f0;
 }
 
 .vdemo-drawer-btn-ghost:hover {

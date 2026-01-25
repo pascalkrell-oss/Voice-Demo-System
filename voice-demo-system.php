@@ -8,11 +8,13 @@ Author: Pascal Krell
 Author URI: https://sprecher-pascal.de
 Text Domain: voice-demo-system
 */
+
 if (!defined('ABSPATH')) {
     exit;
 }
 
-class PK_Voice_Demo_System {
+class VoiceDemoSystem {
+    private const ASSET_VERSION = '2.9.79';
 
     public function __construct() {
         add_action('init', array($this, 'register_post_type'));
@@ -73,15 +75,15 @@ class PK_Voice_Demo_System {
                 'sehr-hoch' => 'Sehr hoch',
             ),
             'industry' => array(
-                'automotive'      => 'Automotive',
-                'healthcare'      => 'Healthcare',
-                'finanzen'        => 'Finanzen',
-                'it-tech'         => 'IT / Technologie',
-                'industrie'       => 'Industrie / Technik',
-                'handel-ecom'     => 'Handel / E-Commerce',
-                'tourismus'       => 'Tourismus',
-                'food-beverage'   => 'Food & Beverage',
-                'non-profit'      => 'Non-Profit / NGO',
+                'automotive'    => 'Automotive',
+                'healthcare'    => 'Healthcare',
+                'finanzen'      => 'Finanzen',
+                'it-tech'       => 'IT / Technologie',
+                'industrie'     => 'Industrie / Technik',
+                'handel-ecom'   => 'Handel / E-Commerce',
+                'tourismus'     => 'Tourismus',
+                'food-beverage' => 'Food & Beverage',
+                'non-profit'    => 'Non-Profit / NGO',
             ),
         );
     }
@@ -103,14 +105,14 @@ class PK_Voice_Demo_System {
         );
 
         $args = array(
-            'labels'             => $labels,
-            'public'             => false,
-            'show_ui'            => true,
-            'show_in_menu'       => true,
-            'menu_icon'          => 'dashicons-microphone',
-            'supports'           => array('title'),
-            'has_archive'        => false,
-            'rewrite'            => false,
+            'labels'       => $labels,
+            'public'       => false,
+            'show_ui'      => true,
+            'show_in_menu' => true,
+            'menu_icon'    => 'dashicons-microphone',
+            'supports'     => array('title'),
+            'has_archive'  => false,
+            'rewrite'      => false,
         );
 
         register_post_type('voice_demo', $args);
@@ -131,7 +133,7 @@ class PK_Voice_Demo_System {
 
         $args = array(
             'hierarchical'      => true,
-            'labels'            => $labels, // <- hier war vorher der Syntaxfehler
+            'labels'            => $labels,
             'show_ui'           => true,
             'show_admin_column' => true,
             'query_var'         => true,
@@ -166,7 +168,7 @@ class PK_Voice_Demo_System {
         $opts = $this->get_attribute_options();
 
         $style_values = is_array($style_saved) ? $style_saved : ($style_saved !== '' ? array($style_saved) : array());
-        $mood_values  = is_array($mood_saved)  ? $mood_saved  : ($mood_saved !== ''  ? array($mood_saved)  : array());
+        $mood_values  = is_array($mood_saved) ? $mood_saved : ($mood_saved !== '' ? array($mood_saved) : array());
         $speed_values = is_array($speed_saved) ? $speed_saved : ($speed_saved !== '' ? array($speed_saved) : array());
         $pitch_values = is_array($pitch_saved) ? $pitch_saved : ($pitch_saved !== '' ? array($pitch_saved) : array());
         ?>
@@ -276,12 +278,10 @@ class PK_Voice_Demo_System {
                     </select>
                 </td>
             </tr>
-            
         </table>
         <?php
     }
 
-    
     /**
      * Vergibt automatisch die nächste freie numerische Demo-ID (Badge),
      * beginnend bei 1. Nutzt alle vorhandenen voice_demo-Posts.
@@ -312,7 +312,7 @@ class PK_Voice_Demo_System {
         return (string) ($max + 1);
     }
 
-public function save_meta($post_id) {
+    public function save_meta($post_id) {
         if (!isset($_POST['voice_demo_meta_box_nonce'])) {
             return;
         }
@@ -335,13 +335,13 @@ public function save_meta($post_id) {
             'voice_demo_badge'        => '_voice_demo_badge',
         );
 
-                foreach ($fields_single as $field => $meta_key) {
+        foreach ($fields_single as $field => $meta_key) {
             if (isset($_POST[$field])) {
                 update_post_meta($post_id, $meta_key, sanitize_text_field(wp_unslash($_POST[$field])));
             }
         }
 
-        // Wenn keine Demo-ID (Badge) gesetzt ist, automatisch die nächste freie Nummer vergeben
+        // Wenn keine Demo-ID (Badge) gesetzt ist, automatisch die nächste freie Nummer vergeben.
         $badge_meta = get_post_meta($post_id, '_voice_demo_badge', true);
         if (empty($badge_meta)) {
             $next = $this->generate_next_badge();
@@ -368,32 +368,30 @@ public function save_meta($post_id) {
         }
     }
 
-    
-public function enqueue_assets() {
-    if (is_admin()) {
-        return;
+    public function enqueue_assets() {
+        if (is_admin()) {
+            return;
+        }
+
+        $url = plugin_dir_url(__FILE__);
+
+        wp_register_style(
+            'voice-demo-grid',
+            $url . 'assets/css/voice-demo-grid.css',
+            array(),
+            self::ASSET_VERSION
+        );
+        wp_register_script(
+            'voice-demo-grid',
+            $url . 'assets/js/voice-demo-grid.js',
+            array(),
+            self::ASSET_VERSION,
+            true
+        );
+
+        wp_enqueue_style('voice-demo-grid');
+        wp_enqueue_script('voice-demo-grid');
     }
-
-    $url = plugin_dir_url(__FILE__);
-
-    // Grid-, Player- und Drawer-Assets (werden benötigt, sobald irgendwo Demos oder die Merkliste im Einsatz sind)
-    wp_register_style(
-        'voice-demo-grid',
-        $url . 'assets/css/voice-demo-grid.css',
-        array(),
-        '2.9.79'
-    );
-    wp_register_script(
-        'voice-demo-grid',
-        $url . 'assets/js/voice-demo-grid.js',
-        array(),
-        '2.9.79',
-        true
-    );
-
-    wp_enqueue_style('voice-demo-grid');
-    wp_enqueue_script('voice-demo-grid');
-}
 
     public function enqueue_admin_assets($hook) {
         global $post;
@@ -417,9 +415,13 @@ public function enqueue_assets() {
     }
 
     public function render_demo_grid($atts) {
-        $atts = shortcode_atts(array(
-            'posts_per_page' => -1,
-        ), $atts, 'voice_demo_grid');
+        $atts = shortcode_atts(
+            array(
+                'posts_per_page' => -1,
+            ),
+            $atts,
+            'voice_demo_grid'
+        );
 
         $query_args = array(
             'post_type'      => 'voice_demo',
@@ -448,18 +450,18 @@ public function enqueue_assets() {
             $pitch_saved  = get_post_meta($post_id, '_voice_demo_pitch', true);
             $industry     = get_post_meta($post_id, '_voice_demo_industry', true);
             $badge        = get_post_meta($post_id, '_voice_demo_badge', true);
-        if (empty($badge)) {
-            $badge = 'ID' . $post_id;
-        }
+            if (empty($badge)) {
+                $badge = 'ID' . $post_id;
+            }
 
-            $style_slugs  = is_array($style_saved)  ? $style_saved  : ($style_saved !== ''  ? array($style_saved)  : array());
-            $mood_slugs   = is_array($mood_saved)   ? $mood_saved   : ($mood_saved !== ''   ? array($mood_saved)   : array());
-            $speed_slugs  = is_array($speed_saved)  ? $speed_saved  : ($speed_saved !== ''  ? array($speed_saved)  : array());
-            $pitch_slugs  = is_array($pitch_saved)  ? $pitch_saved  : ($pitch_saved !== ''  ? array($pitch_saved)  : array());
+            $style_slugs = is_array($style_saved) ? $style_saved : ($style_saved !== '' ? array($style_saved) : array());
+            $mood_slugs  = is_array($mood_saved) ? $mood_saved : ($mood_saved !== '' ? array($mood_saved) : array());
+            $speed_slugs = is_array($speed_saved) ? $speed_saved : ($speed_saved !== '' ? array($speed_saved) : array());
+            $pitch_slugs = is_array($pitch_saved) ? $pitch_saved : ($pitch_saved !== '' ? array($pitch_saved) : array());
 
-            $terms        = get_the_terms($post_id, 'voice_demo_category');
-            $genre_slug   = '';
-            $genre_label  = '';
+            $terms       = get_the_terms($post_id, 'voice_demo_category');
+            $genre_slug  = '';
+            $genre_label = '';
 
             if ($terms && !is_wp_error($terms)) {
                 $first       = reset($terms);
@@ -472,18 +474,18 @@ public function enqueue_assets() {
             }
 
             $items[] = array(
-                'id'           => $post_id,
-                'title'        => $title,
-                'audio_url'    => $audio_url,
-                'download'     => $download_url,
-                'genre_slug'   => $genre_slug,
-                'genre_label'  => $genre_label,
-                'style_slugs'  => $style_slugs,
-                'mood_slugs'   => $mood_slugs,
-                'speed_slugs'  => $speed_slugs,
-                'pitch_slugs'  => $pitch_slugs,
-                'industry'     => $industry,
-                'badge'        => $badge,
+                'id'          => $post_id,
+                'title'       => $title,
+                'audio_url'   => $audio_url,
+                'download'    => $download_url,
+                'genre_slug'  => $genre_slug,
+                'genre_label' => $genre_label,
+                'style_slugs' => $style_slugs,
+                'mood_slugs'  => $mood_slugs,
+                'speed_slugs' => $speed_slugs,
+                'pitch_slugs' => $pitch_slugs,
+                'industry'    => $industry,
+                'badge'       => $badge,
             );
         }
         wp_reset_postdata();
@@ -510,10 +512,12 @@ public function enqueue_assets() {
                                 <select class="vdemo-select" id="vdemo-filter-genre" data-filter-key="genre">
                                     <option value="all">Alle</option>
                                     <?php
-                                    $terms = get_terms(array(
-                                        'taxonomy'   => 'voice_demo_category',
-                                        'hide_empty' => true,
-                                    ));
+                                    $terms = get_terms(
+                                        array(
+                                            'taxonomy'   => 'voice_demo_category',
+                                            'hide_empty' => true,
+                                        )
+                                    );
                                     if (!empty($terms) && !is_wp_error($terms)) :
                                         foreach ($terms as $term) :
                                             ?>
@@ -603,13 +607,13 @@ public function enqueue_assets() {
             </div>
 
             <div class="vdemo-grid vdemo-grid-fade-in" id="vdemo-grid">
-                <?php foreach ($items as $item) :
-
-                    $style_slugs  = $item['style_slugs'];
-                    $mood_slugs   = $item['mood_slugs'];
-                    $speed_slugs  = $item['speed_slugs'];
-                    $pitch_slugs  = $item['pitch_slugs'];
-                    $industry     = $item['industry'];
+                <?php foreach ($items as $item) : ?>
+                    <?php
+                    $style_slugs = $item['style_slugs'];
+                    $mood_slugs  = $item['mood_slugs'];
+                    $speed_slugs = $item['speed_slugs'];
+                    $pitch_slugs = $item['pitch_slugs'];
+                    $industry    = $item['industry'];
 
                     $style_labels = array();
                     foreach ($style_slugs as $slug) {
@@ -789,169 +793,173 @@ public function enqueue_assets() {
      * Standalone-Player Shortcode [voice_demo_player id="123"]
      */
     public function render_demo_player($atts) {
-    $atts = shortcode_atts(array(
-        'id' => 0,
-    ), $atts, 'voice_demo_player');
+        $atts = shortcode_atts(
+            array(
+                'id' => 0,
+            ),
+            $atts,
+            'voice_demo_player'
+        );
 
-    $post_id = intval($atts['id']);
-    if (!$post_id) {
-        return '';
-    }
-
-    $post = get_post($post_id);
-    if (!$post || $post->post_type !== 'voice_demo') {
-        return '';
-    }
-
-    $opts         = $this->get_attribute_options();
-    $title        = get_the_title($post_id);
-    $audio_url    = get_post_meta($post_id, '_voice_demo_audio_url', true);
-    $styles_saved = get_post_meta($post_id, '_voice_demo_style', true);
-    $moods_saved  = get_post_meta($post_id, '_voice_demo_mood', true);
-    $speeds_saved = get_post_meta($post_id, '_voice_demo_speed', true);
-    $pitches_saved= get_post_meta($post_id, '_voice_demo_pitch', true);
-    $industry     = get_post_meta($post_id, '_voice_demo_industry', true);
-    $badge        = get_post_meta($post_id, '_voice_demo_badge', true);
-
-    $style_slugs  = is_array($styles_saved)  ? $styles_saved  : ($styles_saved  !== '' ? array($styles_saved)  : array());
-    $mood_slugs   = is_array($moods_saved)   ? $moods_saved   : ($moods_saved   !== '' ? array($moods_saved)   : array());
-    $speed_slugs  = is_array($speeds_saved)  ? $speeds_saved  : ($speeds_saved  !== '' ? array($speeds_saved)  : array());
-    $pitch_slugs  = is_array($pitches_saved) ? $pitches_saved : ($pitches_saved !== '' ? array($pitches_saved) : array());
-
-    $terms       = get_the_terms($post_id, 'voice_demo_category');
-    $genre_slug  = '';
-    $genre_label = '';
-
-    if ($terms && !is_wp_error($terms)) {
-        $first       = reset($terms);
-        $genre_slug  = $first->slug;
-        $genre_label = $first->name;
-    }
-
-    $style_labels = array();
-    foreach ($style_slugs as $slug) {
-        if (isset($opts['style'][$slug])) {
-            $style_labels[] = $opts['style'][$slug];
+        $post_id = intval($atts['id']);
+        if (!$post_id) {
+            return '';
         }
-    }
 
-    $mood_labels = array();
-    foreach ($mood_slugs as $slug) {
-        if (isset($opts['mood'][$slug])) {
-            $mood_labels[] = $opts['mood'][$slug];
+        $post = get_post($post_id);
+        if (!$post || $post->post_type !== 'voice_demo') {
+            return '';
         }
-    }
 
-    $pitch_labels = array();
-    foreach ($pitch_slugs as $slug) {
-        if (isset($opts['pitch'][$slug])) {
-            $pitch_labels[] = $opts['pitch'][$slug];
+        $opts          = $this->get_attribute_options();
+        $title         = get_the_title($post_id);
+        $audio_url     = get_post_meta($post_id, '_voice_demo_audio_url', true);
+        $styles_saved  = get_post_meta($post_id, '_voice_demo_style', true);
+        $moods_saved   = get_post_meta($post_id, '_voice_demo_mood', true);
+        $speeds_saved  = get_post_meta($post_id, '_voice_demo_speed', true);
+        $pitches_saved = get_post_meta($post_id, '_voice_demo_pitch', true);
+        $industry      = get_post_meta($post_id, '_voice_demo_industry', true);
+        $badge         = get_post_meta($post_id, '_voice_demo_badge', true);
+
+        $style_slugs = is_array($styles_saved) ? $styles_saved : ($styles_saved !== '' ? array($styles_saved) : array());
+        $mood_slugs  = is_array($moods_saved) ? $moods_saved : ($moods_saved !== '' ? array($moods_saved) : array());
+        $speed_slugs = is_array($speeds_saved) ? $speeds_saved : ($speeds_saved !== '' ? array($speeds_saved) : array());
+        $pitch_slugs = is_array($pitches_saved) ? $pitches_saved : ($pitches_saved !== '' ? array($pitches_saved) : array());
+
+        $terms       = get_the_terms($post_id, 'voice_demo_category');
+        $genre_slug  = '';
+        $genre_label = '';
+
+        if ($terms && !is_wp_error($terms)) {
+            $first       = reset($terms);
+            $genre_slug  = $first->slug;
+            $genre_label = $first->name;
         }
-    }
 
-    $speed_labels = array();
-    foreach ($speed_slugs as $slug) {
-        if (isset($opts['speed'][$slug])) {
-            $speed_labels[] = $opts['speed'][$slug];
+        $style_labels = array();
+        foreach ($style_slugs as $slug) {
+            if (isset($opts['style'][$slug])) {
+                $style_labels[] = $opts['style'][$slug];
+            }
         }
-    }
 
-    $info_parts = array();
-    if (!empty($genre_label)) {
-        $info_parts[] = $genre_label;
-    }
-    if (!empty($industry)) {
-        $info_parts[] = $industry;
-    }
-    if (!empty($style_labels)) {
-        $info_parts = array_merge($info_parts, $style_labels);
-    }
-    if (!empty($mood_labels)) {
-        $info_parts = array_merge($info_parts, $mood_labels);
-    }
-    if (!empty($pitch_labels)) {
-        $info_parts = array_merge($info_parts, $pitch_labels);
-    }
-    if (!empty($speed_labels)) {
-        $info_parts = array_merge($info_parts, $speed_labels);
-    }
+        $mood_labels = array();
+        foreach ($mood_slugs as $slug) {
+            if (isset($opts['mood'][$slug])) {
+                $mood_labels[] = $opts['mood'][$slug];
+            }
+        }
 
-    $info_text = implode(' • ', $info_parts);
+        $pitch_labels = array();
+        foreach ($pitch_slugs as $slug) {
+            if (isset($opts['pitch'][$slug])) {
+                $pitch_labels[] = $opts['pitch'][$slug];
+            }
+        }
 
-    ob_start();
-    ?>
-    <div class="vdemo-standalone-player">
-        <div class="vdemo-standalone-header">
-            <div class="vdemo-standalone-header-left">
-                <?php if (!empty($badge)) : ?>
-                    <span class="vdemo-badge vdemo-badge-inline"><?php echo esc_html($badge); ?></span>
-                <?php endif; ?>
-                <span class="vdemo-standalone-audio-title"><?php echo esc_html($title); ?></span>
-                <?php if (!empty($info_parts)) : ?>
-                    <button type="button" class="vdemo-subline-info-badge vdemo-subline-info-badge-small" aria-label="Eigenschaften anzeigen">
-                        <span class="vdemo-subline-info-tooltip">
-                            <?php foreach ($info_parts as $part) : ?>
-                                <span class="vdemo-subline-chip"><?php echo esc_html($part); ?></span>
-                            <?php endforeach; ?>
+        $speed_labels = array();
+        foreach ($speed_slugs as $slug) {
+            if (isset($opts['speed'][$slug])) {
+                $speed_labels[] = $opts['speed'][$slug];
+            }
+        }
+
+        $info_parts = array();
+        if (!empty($genre_label)) {
+            $info_parts[] = $genre_label;
+        }
+        if (!empty($industry)) {
+            $info_parts[] = $industry;
+        }
+        if (!empty($style_labels)) {
+            $info_parts = array_merge($info_parts, $style_labels);
+        }
+        if (!empty($mood_labels)) {
+            $info_parts = array_merge($info_parts, $mood_labels);
+        }
+        if (!empty($pitch_labels)) {
+            $info_parts = array_merge($info_parts, $pitch_labels);
+        }
+        if (!empty($speed_labels)) {
+            $info_parts = array_merge($info_parts, $speed_labels);
+        }
+
+        $info_text = implode(' • ', $info_parts);
+
+        ob_start();
+        ?>
+        <div class="vdemo-standalone-player">
+            <div class="vdemo-standalone-header">
+                <div class="vdemo-standalone-header-left">
+                    <?php if (!empty($badge)) : ?>
+                        <span class="vdemo-badge vdemo-badge-inline"><?php echo esc_html($badge); ?></span>
+                    <?php endif; ?>
+                    <span class="vdemo-standalone-audio-title"><?php echo esc_html($title); ?></span>
+                    <?php if (!empty($info_parts)) : ?>
+                        <button type="button" class="vdemo-subline-info-badge vdemo-subline-info-badge-small" aria-label="Eigenschaften anzeigen">
+                            <span class="vdemo-subline-info-tooltip">
+                                <?php foreach ($info_parts as $part) : ?>
+                                    <span class="vdemo-subline-chip"><?php echo esc_html($part); ?></span>
+                                <?php endforeach; ?>
+                            </span>
+                        </button>
+                    <?php endif; ?>
+                </div>
+
+                <div class="vdemo-standalone-header-right">
+                    <?php if (!empty($audio_url)) : ?>
+                        <a class="vdemo-download-mini" href="<?php echo esc_url($audio_url); ?>" download>
+                            <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
+                                <path d="M12 3a1 1 0 0 1 1 1v9.086l3.293-3.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5A1 1 0 0 1 7.707 9.793L11 13.086V4a1 1 0 0 1 1-1zm-6 16a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1z"/>
+                            </svg>
+                        </a>
+                    <?php endif; ?>
+
+                    <button
+                        class="vdemo-memo-mini vdemo-memo-button"
+                        type="button"
+                        aria-label="Demo merken"
+                        data-demo-id="<?php echo esc_attr($post_id); ?>"
+                        data-demo-title="<?php echo esc_attr($title); ?>"
+                        data-demo-info="<?php echo esc_attr($info_text); ?>"
+                        data-demo-genre="<?php echo esc_attr($genre_label); ?>"
+                        data-demo-genre-slug="<?php echo esc_attr($genre_slug); ?>"
+                        data-demo-audio="<?php echo esc_url($audio_url); ?>"
+                        data-demo-badge="<?php echo esc_attr($badge); ?>"
+                    >
+                        <span class="vdemo-memo-mini-icon">
+                            <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
+                                <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14.5a.5.5 0 0 1-.79.407L12 15.5l-5.21 3.407A.5.5 0 0 1 6 18.5V4zm2 0h8v11.382l-4.21-2.75a1 1 0 0 0-1.08 0L8 15.382V4z" />
+                            </svg>
                         </span>
+                        <span class="vdemo-memo-mini-tooltip">Auf die Merkliste setzen</span>
                     </button>
-                <?php endif; ?>
-            </div>
-
-            <div class="vdemo-standalone-header-right">
-                <?php if (!empty($audio_url)) : ?>
-                    <a class="vdemo-download-mini" href="<?php echo esc_url($audio_url); ?>" download>
-                        <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
-                            <path d="M12 3a1 1 0 0 1 1 1v9.086l3.293-3.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5A1 1 0 0 1 7.707 9.793L11 13.086V4a1 1 0 0 1 1-1zm-6 16a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1z"/>
-                        </svg>
-                    </a>
-                <?php endif; ?>
-
-                <button
-                    class="vdemo-memo-mini vdemo-memo-button"
-                    type="button"
-                    aria-label="Demo merken"
-                    data-demo-id="<?php echo esc_attr($post_id); ?>"
-                    data-demo-title="<?php echo esc_attr($title); ?>"
-                    data-demo-info="<?php echo esc_attr($info_text); ?>"
-                    data-demo-genre="<?php echo esc_attr($genre_label); ?>"
-                    data-demo-genre-slug="<?php echo esc_attr($genre_slug); ?>"
-                    data-demo-audio="<?php echo esc_url($audio_url); ?>"
-                    data-demo-badge="<?php echo esc_attr($badge); ?>"
-                >
-                    <span class="vdemo-memo-mini-icon">
-                        <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
-                            <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14.5a.5.5 0 0 1-.79.407L12 15.5l-5.21 3.407A.5.5 0 0 1 6 18.5V4zm2 0h8v11.382l-4.21-2.75a1 1 0 0 0-1.08 0L8 15.382V4z" />
-                        </svg>
-                    </span>
-                    <span class="vdemo-memo-mini-tooltip">Auf die Merkliste setzen</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="vdemo-card-audio vdemo-card-audio-standalone">
-            <button class="vdemo-play-button" type="button">
-                <span class="vdemo-play-icon-play"></span>
-                <span class="vdemo-play-icon-pause"></span>
-            </button>
-
-            <div class="vdemo-progress-wrapper">
-                <div class="vdemo-progress-track">
-                    <div class="vdemo-progress-fill"></div>
                 </div>
             </div>
 
-            <span class="vdemo-time-label">0:00</span>
-            <?php if (!empty($audio_url)) : ?>
-                <audio class="vdemo-audio" src="<?php echo esc_url($audio_url); ?>" preload="none"></audio>
-            <?php endif; ?>
-        </div>
-    </div>
-    <?php
-    return ob_get_clean();
-}
+            <div class="vdemo-card-audio vdemo-card-audio-standalone">
+                <button class="vdemo-play-button" type="button">
+                    <span class="vdemo-play-icon-play"></span>
+                    <span class="vdemo-play-icon-pause"></span>
+                </button>
 
-public function add_shortcode_column($columns) {
+                <div class="vdemo-progress-wrapper">
+                    <div class="vdemo-progress-track">
+                        <div class="vdemo-progress-fill"></div>
+                    </div>
+                </div>
+
+                <span class="vdemo-time-label">0:00</span>
+                <?php if (!empty($audio_url)) : ?>
+                    <audio class="vdemo-audio" src="<?php echo esc_url($audio_url); ?>" preload="none"></audio>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    public function add_shortcode_column($columns) {
         $columns['vdemo_shortcode'] = 'Shortcode';
         return $columns;
     }
@@ -965,7 +973,6 @@ public function add_shortcode_column($columns) {
             }
         }
     }
-
 
     public function render_global_drawer() {
         if (is_admin()) {
@@ -982,53 +989,53 @@ public function add_shortcode_column($columns) {
             // Auf der Grid-Seite wird der Drawer direkt innerhalb des Shortcodes gerendert.
             return;
         }
-?>
+        ?>
         <button class="vdemo-drawer-toggle" id="vdemo-drawer-toggle" type="button">
-                        <span class="vdemo-drawer-toggle-icon">
-                            <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
-                                <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14.5a.5.5 0 0 1-.79.407L12 15.5l-5.21 3.407A.5.5 0 0 1 6 18.5V4zm2 0h8v11.382l-4.21-2.75a1 1 0 0 0-1.08 0L8 15.382V4z" />
-                            </svg>
-                        </span>
-                        <span class="vdemo-drawer-toggle-label">Gemerkte Demos</span>
-                        <span class="vdemo-drawer-count" id="vdemo-drawer-count">0</span>
+            <span class="vdemo-drawer-toggle-icon">
+                <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
+                    <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14.5a.5.5 0 0 1-.79.407L12 15.5l-5.21 3.407A.5.5 0 0 1 6 18.5V4zm2 0h8v11.382l-4.21-2.75a1 1 0 0 0-1.08 0L8 15.382V4z" />
+                </svg>
+            </span>
+            <span class="vdemo-drawer-toggle-label">Gemerkte Demos</span>
+            <span class="vdemo-drawer-count" id="vdemo-drawer-count">0</span>
+        </button>
+
+        <aside class="vdemo-drawer" id="vdemo-drawer" aria-hidden="true">
+            <div class="vdemo-drawer-header">
+                <h4>Gemerkte Demos</h4>
+                <button class="vdemo-drawer-close" id="vdemo-drawer-close" type="button">
+                    Schließen
+                </button>
+            </div>
+            <div class="vdemo-drawer-body">
+                <div class="vdemo-drawer-list-wrap">
+                    <ul class="vdemo-drawer-list" id="vdemo-drawer-list"></ul>
+                </div>
+            </div>
+            <div class="vdemo-drawer-footer">
+                <div class="vdemo-drawer-footer-inner">
+                    <div class="vdemo-drawer-footer-buttons">
+                        <button type="button" class="vdemo-drawer-btn vdemo-drawer-btn-primary" id="vdemo-drawer-add">
+                            Zur Anfrage hinzufügen
+                        </button>
+                        <button type="button" class="vdemo-drawer-btn vdemo-drawer-btn-ghost" id="vdemo-drawer-share">
+                            Merkliste teilen
+                        </button>
+                    </div>
+
+                    <div class="vdemo-drawer-info-box">
+                        <strong>So funktioniert's:</strong>
+                        <p>Deine gemerkten Demos werden Deiner Anfrage automatisch angehängt – so bekomme ich sofort ein Gefühl für Deinen gewünschten Klang und Stil. Optional kannst Du Deine Auswahl über den Teilen-Button mit anderen abstimmen.</p>
+                    </div>
+
+                    <button type="button" class="vdemo-drawer-btn vdemo-drawer-btn-danger" id="vdemo-drawer-clear">
+                        Liste leeren
                     </button>
-        
-                    <aside class="vdemo-drawer" id="vdemo-drawer" aria-hidden="true">
-                        <div class="vdemo-drawer-header">
-                            <h4>Gemerkte Demos</h4>
-                            <button class="vdemo-drawer-close" id="vdemo-drawer-close" type="button">
-                                Schließen
-                            </button>
-                        </div>
-                        <div class="vdemo-drawer-body">
-                            <div class="vdemo-drawer-list-wrap">
-                                <ul class="vdemo-drawer-list" id="vdemo-drawer-list"></ul>
-                            </div>
-                        </div>
-                        <div class="vdemo-drawer-footer">
-                            <div class="vdemo-drawer-footer-inner">
-                                <div class="vdemo-drawer-footer-buttons">
-                                    <button type="button" class="vdemo-drawer-btn vdemo-drawer-btn-primary" id="vdemo-drawer-add">
-                                        Zur Anfrage hinzufügen
-                                    </button>
-                                    <button type="button" class="vdemo-drawer-btn vdemo-drawer-btn-ghost" id="vdemo-drawer-share">
-                                        Merkliste teilen
-                                    </button>
-                                </div>
-        
-                                <div class="vdemo-drawer-info-box">
-                                    <strong>So funktioniert's:</strong>
-                                    <p>Deine gemerkten Demos werden Deiner Anfrage automatisch angehängt – so bekomme ich sofort ein Gefühl für Deinen gewünschten Klang und Stil. Optional kannst Du Deine Auswahl über den Teilen-Button mit anderen abstimmen.</p>
-                                </div>
-        
-                                <button type="button" class="vdemo-drawer-btn vdemo-drawer-btn-danger" id="vdemo-drawer-clear">
-                                    Liste leeren
-                                </button>
-                            </div>
-                        </div>
-                    </aside>
-<?php
+                </div>
+            </div>
+        </aside>
+        <?php
     }
 }
 
-new PK_Voice_Demo_System();
+new VoiceDemoSystem();

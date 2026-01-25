@@ -898,8 +898,22 @@ public function enqueue_assets() {
                     </button>
                 <?php endif; ?>
             </div>
+        </div>
 
-            <div class="vdemo-standalone-header-right">
+        <div class="vdemo-card-audio vdemo-card-audio-standalone">
+            <button class="vdemo-play-button" type="button">
+                <span class="vdemo-play-icon-play"></span>
+                <span class="vdemo-play-icon-pause"></span>
+            </button>
+
+            <div class="vdemo-progress-wrapper">
+                <div class="vdemo-progress-track">
+                    <div class="vdemo-progress-fill"></div>
+                </div>
+            </div>
+
+            <span class="vdemo-time-label">0:00</span>
+            <div class="vdemo-standalone-actions">
                 <?php if (!empty($audio_url)) : ?>
                     <a class="vdemo-download-mini" href="<?php echo esc_url($audio_url); ?>" download>
                         <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
@@ -928,21 +942,6 @@ public function enqueue_assets() {
                     <span class="vdemo-memo-mini-tooltip">Auf die Merkliste setzen</span>
                 </button>
             </div>
-        </div>
-
-        <div class="vdemo-card-audio vdemo-card-audio-standalone">
-            <button class="vdemo-play-button" type="button">
-                <span class="vdemo-play-icon-play"></span>
-                <span class="vdemo-play-icon-pause"></span>
-            </button>
-
-            <div class="vdemo-progress-wrapper">
-                <div class="vdemo-progress-track">
-                    <div class="vdemo-progress-fill"></div>
-                </div>
-            </div>
-
-            <span class="vdemo-time-label">0:00</span>
             <?php if (!empty($audio_url)) : ?>
                 <audio class="vdemo-audio" src="<?php echo esc_url($audio_url); ?>" preload="none"></audio>
             <?php endif; ?>

@@ -34,12 +34,11 @@
 /* Filterbar */
 
 .vdemo-filter-bar {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid #e6e7eb;
+    border-radius: 14px;
     padding: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.04);
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -97,7 +96,8 @@
 
 .vdemo-filter-label {
     font-size: 0.75rem;
-    color: #6b7280;
+    color: #111827;
+    letter-spacing: 0.02em;
 }
 
 /* Selects / Dropdowns */
@@ -110,8 +110,8 @@
 .vdemo-multi-toggle {
     width: 100%;
     padding: 0.6rem 2.5rem 0.6rem 1rem;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    border: 1px solid #e2e4e9;
     background-color: #ffffff;
     font-size: 0.9rem;
     color: #111827;
@@ -122,7 +122,7 @@
     background-repeat: no-repeat;
     background-position: right 0.8rem center;
     background-size: 1rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     text-align: left;
 }
@@ -138,15 +138,15 @@
 
 .vdemo-select-hover,
 .vdemo-multi-toggle:hover {
-    border-color: #cbd5f5;
-    box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.2);
+    border-color: #d5d9e1;
+    box-shadow: 0 2px 6px rgba(16, 24, 40, 0.08);
 }
 
 .vdemo-select-focus,
 .vdemo-multi-open .vdemo-multi-toggle {
-    border-color: #94a3b8;
-    box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.25);
-    background-color: #f9fafb;
+    border-color: #cbd2dc;
+    box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.08);
+    background-color: #ffffff;
 }
 
 .vdemo-select-icon {
@@ -773,4 +773,3 @@
 .vdemo-card-page-hidden {
     display: none;
 }
-

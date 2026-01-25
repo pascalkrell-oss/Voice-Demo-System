@@ -891,20 +891,57 @@ public function enqueue_assets() {
     <div class="vdemo-standalone-player">
         <div class="vdemo-standalone-header">
             <div class="vdemo-standalone-header-left">
-                <?php if (!empty($badge)) : ?>
-                    <span class="vdemo-badge vdemo-badge-inline"><?php echo esc_html($badge); ?></span>
+                <div class="vdemo-standalone-badge-row">
+                    <?php if (!empty($badge)) : ?>
+                        <span class="vdemo-badge vdemo-badge-inline"><?php echo esc_html($badge); ?></span>
+                    <?php endif; ?>
+                </div>
+                <div class="vdemo-standalone-title-row">
+                    <span class="vdemo-standalone-audio-title"><?php echo esc_html($title); ?></span>
+                    <?php if (!empty($info_parts)) : ?>
+                        <button type="button" class="vdemo-subline-info-badge vdemo-subline-info-badge-small" aria-label="Eigenschaften anzeigen">
+                            <span class="vdemo-subline-info-tooltip">
+                                <?php foreach ($info_parts as $part) : ?>
+                                    <span class="vdemo-subline-chip"><?php echo esc_html($part); ?></span>
+                                <?php endforeach; ?>
+                            </span>
+                        </button>
+                    <?php endif; ?>
+                </div>
+                <?php if (!empty($info_text)) : ?>
+                    <span class="vdemo-standalone-subline"><?php echo esc_html($info_text); ?></span>
                 <?php endif; ?>
-                <span class="vdemo-standalone-audio-title"><?php echo esc_html($title); ?></span>
-                <?php if (!empty($info_parts)) : ?>
-                    <button type="button" class="vdemo-subline-info-badge vdemo-subline-info-badge-small" aria-label="Eigenschaften anzeigen">
-                        <span class="vdemo-subline-info-tooltip">
-                            <?php foreach ($info_parts as $part) : ?>
-                                <span class="vdemo-subline-chip"><?php echo esc_html($part); ?></span>
-                            <?php endforeach; ?>
+            </div>
+            <div class="vdemo-standalone-header-right">
+                <div class="vdemo-standalone-actions">
+                    <?php if (!empty($audio_url)) : ?>
+                        <a class="vdemo-download-mini" href="<?php echo esc_url($audio_url); ?>" download>
+                            <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
+                                <path d="M12 3a1 1 0 0 1 1 1v9.086l3.293-3.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5A1 1 0 0 1 7.707 9.793L11 13.086V4a1 1 0 0 1 1-1zm-6 16a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1z"/>
+                            </svg>
+                        </a>
+                    <?php endif; ?>
+
+                    <button
+                        class="vdemo-memo-mini vdemo-memo-button"
+                        type="button"
+                        aria-label="Demo merken"
+                        data-demo-id="<?php echo esc_attr($post_id); ?>"
+                        data-demo-title="<?php echo esc_attr($title); ?>"
+                        data-demo-info="<?php echo esc_attr($info_text); ?>"
+                        data-demo-genre="<?php echo esc_attr($genre_label); ?>"
+                        data-demo-genre-slug="<?php echo esc_attr($genre_slug); ?>"
+                        data-demo-audio="<?php echo esc_url($audio_url); ?>"
+                        data-demo-badge="<?php echo esc_attr($badge); ?>"
+                    >
+                        <span class="vdemo-memo-mini-icon">
+                            <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
+                                <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14.5a.5.5 0 0 1-.79.407L12 15.5l-5.21 3.407A.5.5 0 0 1 6 18.5V4zm2 0h8v11.382l-4.21-2.75a1 1 0 0 0-1.08 0L8 15.382V4z" />
+                            </svg>
                         </span>
+                        <span class="vdemo-memo-mini-tooltip">Auf die Merkliste setzen</span>
                     </button>
-                <?php endif; ?>
-                <span class="vdemo-standalone-audio-title"><?php echo esc_html($title); ?></span>
+                </div>
             </div>
         </div>
 
@@ -919,36 +956,6 @@ public function enqueue_assets() {
                 <div class="vdemo-progress-track">
                     <div class="vdemo-progress-fill"></div>
                 </div>
-            </div>
-
-            <div class="vdemo-standalone-actions">
-                <?php if (!empty($audio_url)) : ?>
-                    <a class="vdemo-download-mini" href="<?php echo esc_url($audio_url); ?>" download>
-                        <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
-                            <path d="M12 3a1 1 0 0 1 1 1v9.086l3.293-3.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5A1 1 0 0 1 7.707 9.793L11 13.086V4a1 1 0 0 1 1-1zm-6 16a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1z"/>
-                        </svg>
-                    </a>
-                <?php endif; ?>
-
-                <button
-                    class="vdemo-memo-mini vdemo-memo-button"
-                    type="button"
-                    aria-label="Demo merken"
-                    data-demo-id="<?php echo esc_attr($post_id); ?>"
-                    data-demo-title="<?php echo esc_attr($title); ?>"
-                    data-demo-info="<?php echo esc_attr($info_text); ?>"
-                    data-demo-genre="<?php echo esc_attr($genre_label); ?>"
-                    data-demo-genre-slug="<?php echo esc_attr($genre_slug); ?>"
-                    data-demo-audio="<?php echo esc_url($audio_url); ?>"
-                    data-demo-badge="<?php echo esc_attr($badge); ?>"
-                >
-                    <span class="vdemo-memo-mini-icon">
-                        <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
-                            <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14.5a.5.5 0 0 1-.79.407L12 15.5l-5.21 3.407A.5.5 0 0 1 6 18.5V4zm2 0h8v11.382l-4.21-2.75a1 1 0 0 0-1.08 0L8 15.382V4z" />
-                        </svg>
-                    </span>
-                    <span class="vdemo-memo-mini-tooltip">Auf die Merkliste setzen</span>
-                </button>
             </div>
             <?php if (!empty($audio_url)) : ?>
                 <audio class="vdemo-audio" src="<?php echo esc_url($audio_url); ?>" preload="none"></audio>

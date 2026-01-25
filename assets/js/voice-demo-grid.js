@@ -818,8 +818,10 @@ filterSelects.forEach(function (select) {
 
                 var card = document.createElement("div");
                 card.className = "vdemo-drawer-item";
+                card.setAttribute("data-memo-id", id);
                 if (newId && String(id) === String(newId)) {
                     card.className += " vdemo-drawer-item--new";
+                    card.className += " vdemo-drawer-item--enter";
                 }
 
                 var titleRow = document.createElement("div");
@@ -945,6 +947,15 @@ filterSelects.forEach(function (select) {
         });
 
         wireAudioContainers(drawerList);
+
+        var enteringItems = drawerList.querySelectorAll(".vdemo-drawer-item--enter");
+        if (enteringItems.length) {
+            window.setTimeout(function () {
+                enteringItems.forEach(function (itemEl) {
+                    itemEl.classList.remove("vdemo-drawer-item--enter");
+                });
+            }, 30);
+        }
     }
 
     function openDrawer() {
@@ -1043,22 +1054,39 @@ filterSelects.forEach(function (select) {
     function toggleMemo(id, data) {
         var key = String(id);
         var hadMemos = Object.keys(memoItems).length > 0;
+        var isRemoving = !!memoItems[key];
+        var drawerItem = null;
 
-        if (memoItems[key]) {
-            delete memoItems[key];
-        } else {
-            memoItems[key] = data;
+        if (isRemoving && drawerList) {
+            drawerItem = drawerList.querySelector('.vdemo-drawer-item[data-memo-id="' + key + '"]');
         }
-        saveMemosToStorage();
-        syncMemoButtons();
-        renderDrawerList(memoItems[key] ? id : null);
-        updateDrawerCount();
 
-        var hasMemosNow = Object.keys(memoItems).length > 0;
+        if (isRemoving && drawerItem) {
+            drawerItem.classList.add("vdemo-drawer-item--exit");
+            window.setTimeout(function () {
+                delete memoItems[key];
+                saveMemosToStorage();
+                syncMemoButtons();
+                renderDrawerList();
+                updateDrawerCount();
+            }, 220);
+        } else {
+            if (memoItems[key]) {
+                delete memoItems[key];
+            } else {
+                memoItems[key] = data;
+            }
+            saveMemosToStorage();
+            syncMemoButtons();
+            renderDrawerList(memoItems[key] ? id : null);
+            updateDrawerCount();
 
-        // Auf der Demo-Seite: beim ersten Eintrag Merkliste automatisch öffnen
-        if (!hadMemos && hasMemosNow && grid) {
-            openDrawer();
+            var hasMemosNow = Object.keys(memoItems).length > 0;
+
+            // Auf der Demo-Seite: beim ersten Eintrag Merkliste automatisch öffnen
+            if (!hadMemos && hasMemosNow && grid) {
+                openDrawer();
+            }
         }
     }
 

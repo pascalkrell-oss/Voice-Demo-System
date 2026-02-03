@@ -908,9 +908,6 @@ public function enqueue_assets() {
                         </button>
                     <?php endif; ?>
                 </div>
-                <?php if (!empty($info_text)) : ?>
-                    <span class="vdemo-standalone-subline"><?php echo esc_html($info_text); ?></span>
-                <?php endif; ?>
             </div>
             <div class="vdemo-standalone-header-right">
                 <div class="vdemo-standalone-actions">

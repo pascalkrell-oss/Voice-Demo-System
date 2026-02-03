@@ -454,7 +454,7 @@
 .vdemo-card-inner {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.4rem;
 }
 
 .vdemo-card-header {
@@ -464,7 +464,7 @@
     background: transparent;
     color: #0f141a;
     border-radius: 12px;
-    padding: 0.5rem 0.6rem;
+    padding: 0.35rem 0.6rem;
     overflow: visible;
 }
 
@@ -640,7 +640,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-top: 0.6rem;
+    margin-top: 0.35rem;
     padding: 0.6rem 0.7rem;
     border-radius: 14px;
     border: 1px solid rgba(15, 20, 26, 0.08);
@@ -933,7 +933,7 @@
     box-shadow: none;
     font-weight: 600;
     font-size: 0.8rem;
-    z-index: 40;
+    z-index: 100000;
     transition: box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
@@ -999,7 +999,7 @@
     box-shadow: -12px 0 30px rgba(15, 20, 26, 0.08);
     transform: translateX(110%);
     transition: transform 0.28s ease;
-    z-index: 50;
+    z-index: 99999;
 }
 
 .vdemo-drawer-open {
@@ -1007,7 +1007,7 @@
 }
 
 .vdemo-drawer-header {
-    padding: 1.2rem 1.5rem 1rem;
+    padding: 0.8rem 1.5rem 0.7rem;
     border-bottom: 1px solid rgba(15, 20, 26, 0.08);
     display: flex;
     align-items: center;
@@ -1253,7 +1253,7 @@
 }
 
 .vdemo-drawer-footer-buttons .vdemo-drawer-btn + .vdemo-drawer-btn {
-    border-left: none;
+    border-left: 1px solid rgba(15, 20, 26, 0.12);
 }
 
 .vdemo-drawer-btn-primary {
@@ -1322,19 +1322,19 @@
 .vdemo-standalone-player {
     max-width: 520px;
     margin: 0 auto;
-    padding: 1.1rem 1.25rem;
+    padding: 1rem 1.15rem;
     border-radius: 18px;
-    border: 1px solid #e2e8f0;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
-    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+    border: 1px solid rgba(15, 20, 26, 0.08);
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(15, 20, 26, 0.1);
 }
 
 .vdemo-standalone-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .vdemo-standalone-header-left {
@@ -1349,14 +1349,14 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.15rem 0.6rem;
+    padding: 0.1rem 0.55rem;
     border-radius: 999px;
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
+    background: rgba(15, 20, 26, 0.06);
+    border: 1px solid rgba(15, 20, 26, 0.1);
 }
 
 .vdemo-standalone-audio-title {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #0b1220;
     overflow: hidden;
@@ -1378,7 +1378,7 @@
 }
 
 .vdemo-standalone-subline {
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     color: #64748b;
     line-height: 1.4;
     max-width: 100%;
@@ -1397,24 +1397,25 @@
 .vdemo-standalone-actions {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    margin-left: 0.2rem;
+    gap: 0.3rem;
+    margin-left: 0.25rem;
 }
 
 .vdemo-standalone-actions .vdemo-download-mini,
 .vdemo-standalone-actions .vdemo-memo-mini {
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     box-shadow: none;
+    border-radius: 10px;
 }
 
 .vdemo-download-mini {
-    width: 30px;
-    height: 30px;
-    border-radius: 999px;
-    border: 1px solid #e2e8f0;
-    background: #f1f5f9;
-    color: #1d4ed8;
+    width: 26px;
+    height: 26px;
+    border-radius: 10px;
+    border: 1px solid rgba(15, 20, 26, 0.12);
+    background: #f8fafc;
+    color: #1a93ee;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1423,18 +1424,18 @@
 }
 
 .vdemo-download-mini:hover {
-    background: #eef4fb;
-    border-color: #cbd5e1;
-    color: #1e40af;
+    background: #f1f7ff;
+    border-color: rgba(26, 147, 238, 0.35);
+    color: #0b5fb8;
 }
 
 .vdemo-memo-mini {
-    width: 30px;
-    height: 30px;
-    border-radius: 999px;
-    border: 1px solid #e2e8f0;
-    background: #f1f5f9;
-    color: #1f2937;
+    width: 26px;
+    height: 26px;
+    border-radius: 10px;
+    border: 1px solid rgba(15, 20, 26, 0.12);
+    background: #f8fafc;
+    color: #0f141a;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1445,9 +1446,9 @@
 }
 
 .vdemo-memo-mini:hover {
-    background: #eef4fb;
-    border-color: #cbd5e1;
-    color: #1d4ed8;
+    background: #f1f7ff;
+    border-color: rgba(26, 147, 238, 0.35);
+    color: #0b5fb8;
 }
 
 .vdemo-download-mini svg,
@@ -1488,12 +1489,12 @@
 }
 
 .vdemo-card-audio-standalone {
-    margin-top: 0.75rem;
-    padding: 0.55rem 0.75rem;
-    border-radius: 12px;
-    border: 1px solid #e5eaf3;
-    background: #ffffff;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    margin-top: 0.6rem;
+    padding: 0.6rem 0.7rem;
+    border-radius: 14px;
+    border: 1px solid rgba(15, 20, 26, 0.08);
+    background: #f6f8fb;
+    box-shadow: none;
 }
 
 /* Pagination, Drawer, Standalone etc. */

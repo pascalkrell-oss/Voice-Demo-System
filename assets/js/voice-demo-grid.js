@@ -771,8 +771,9 @@ filterSelects.forEach(function (select) {
         if (drawerToggle) {
             if (count > 0) {
                 drawerToggle.classList.add("vdemo-has-items");
+                drawerToggle.classList.remove("vdemo-drawer-toggle-hidden");
                 drawerToggle.style.pointerEvents = "";
-                drawerToggle.style.display = "";
+                drawerToggle.style.display = "inline-flex";
                 if (prevMemoCount === 0) {
                     drawerToggle.classList.add("vdemo-drawer-toggle-pop");
                     setTimeout(function () {
@@ -782,7 +783,7 @@ filterSelects.forEach(function (select) {
             } else {
                 drawerToggle.classList.remove("vdemo-has-items");
                 drawerToggle.classList.remove("vdemo-drawer-toggle-active");
-                drawerToggle.classList.remove("vdemo-drawer-toggle-hidden");
+                drawerToggle.classList.add("vdemo-drawer-toggle-hidden");
                 drawerToggle.style.pointerEvents = "none";
                 drawerToggle.style.display = "none";
             }
@@ -999,10 +1000,14 @@ filterSelects.forEach(function (select) {
         if (!drawer || !drawerToggle) return;
         drawer.classList.remove("vdemo-drawer-open");
         drawerToggle.classList.remove("vdemo-drawer-toggle-active");
-        drawerToggle.classList.remove("vdemo-drawer-toggle-hidden");
         if (Object.keys(memoItems).length > 0) {
+            drawerToggle.classList.remove("vdemo-drawer-toggle-hidden");
             drawerToggle.style.pointerEvents = "";
-            drawerToggle.style.display = "";
+            drawerToggle.style.display = "inline-flex";
+        } else {
+            drawerToggle.classList.add("vdemo-drawer-toggle-hidden");
+            drawerToggle.style.pointerEvents = "none";
+            drawerToggle.style.display = "none";
         }
         drawer.setAttribute("aria-hidden", "true");
     }

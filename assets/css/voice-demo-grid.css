@@ -462,6 +462,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #0f141a;
+    color: #f8fafc;
+    border-radius: 10px;
+    padding: 0.55rem 0.75rem;
+    overflow: visible;
 }
 
 .vdemo-card-title-wrap {
@@ -477,11 +482,14 @@
     margin: 0;
     font-size: 18px;
     font-weight: 500;
-    color: #0f1231;
+    color: #f8fafc;
     flex: 1;
     line-height: 1.25;
     position: relative;
     top: 1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Badge mit Demo-ID */
@@ -531,6 +539,18 @@
     outline: none;
     flex-shrink: 0;
     top: 1px;
+}
+
+.vdemo-card-header .vdemo-badge {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+}
+
+.vdemo-card-header .vdemo-subline-info-badge {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
 }
 
 .vdemo-subline-info-badge::before {
@@ -894,7 +914,8 @@
 
 .vdemo-drawer-toggle {
     position: fixed;
-    right: 1.5rem;
+    right: auto;
+    left: 1.5rem;
     bottom: 2rem;
     background: #1a93ee;
     color: #ffffff;
@@ -914,6 +935,17 @@
 
 .vdemo-drawer-toggle:hover {
     background: #137ecf;
+}
+
+.vdemo-drawer-toggle-hidden {
+    display: none !important;
+}
+
+@media (max-width: 720px) {
+    .vdemo-drawer-toggle {
+        left: 1rem;
+        bottom: 1.25rem;
+    }
 }
 
 .vdemo-drawer-toggle-icon {
@@ -976,18 +1008,21 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    background: #0f141a;
+    color: #ffffff;
 }
 
 .vdemo-drawer-header h4 {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
+    color: #ffffff;
 }
 
 .vdemo-drawer-close {
-    background: #e8f1ff;
-    border: none;
-    color: #0b3760;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: #ffffff;
     border-radius: 999px;
     padding: 0.35rem 0.85rem;
     cursor: pointer;
@@ -996,8 +1031,8 @@
 }
 
 .vdemo-drawer-close:hover {
-    background: #d7e9ff;
-    color: #0a2b4f;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
 }
 
 .vdemo-drawer-body {
@@ -1059,13 +1094,21 @@
     align-items: center;
     gap: 0.5rem;
     justify-content: space-between;
+    background: #0f141a;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 0.5rem 0.65rem;
 }
 
 .vdemo-drawer-item-title {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #0f172a;
+    color: #ffffff;
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .vdemo-drawer-item-actions {
@@ -1078,14 +1121,14 @@
     width: 18px;
     height: 18px;
     border-radius: 999px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.45);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 10px;
-    color: #0f172a;
+    color: #ffffff;
     position: relative;
-    background: #e5f1ff;
+    background: rgba(255, 255, 255, 0.12);
     z-index: 2;
 }
 
@@ -1130,9 +1173,9 @@
 }
 
 .vdemo-drawer-item-remove {
-    border: 1px solid #e2e8f0;
-    background: #ffffff;
-    color: #64748b;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    background: transparent;
+    color: #ffffff;
     cursor: pointer;
     font-size: 0.65rem;
     font-weight: 600;
@@ -1142,9 +1185,9 @@
 }
 
 .vdemo-drawer-item-remove:hover {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-    color: #475569;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.65);
+    color: #ffffff;
 }
 
 .vdemo-drawer-footer {

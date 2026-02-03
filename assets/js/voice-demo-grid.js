@@ -771,7 +771,7 @@ filterSelects.forEach(function (select) {
         if (drawerToggle) {
             if (count > 0) {
                 drawerToggle.classList.add("vdemo-has-items");
-                drawerToggle.classList.remove("vdemo-drawer-toggle-hidden");
+                drawerToggle.classList.remove("vdemo-is-hidden");
                 drawerToggle.style.pointerEvents = "";
                 drawerToggle.style.display = "inline-flex";
                 if (prevMemoCount === 0) {
@@ -783,7 +783,7 @@ filterSelects.forEach(function (select) {
             } else {
                 drawerToggle.classList.remove("vdemo-has-items");
                 drawerToggle.classList.remove("vdemo-drawer-toggle-active");
-                drawerToggle.classList.add("vdemo-drawer-toggle-hidden");
+                drawerToggle.classList.add("vdemo-is-hidden");
                 drawerToggle.style.pointerEvents = "none";
                 drawerToggle.style.display = "none";
             }
@@ -990,7 +990,7 @@ filterSelects.forEach(function (select) {
         if (!drawer || !drawerToggle) return;
         drawer.classList.add("vdemo-drawer-open");
         drawerToggle.classList.add("vdemo-drawer-toggle-active");
-        drawerToggle.classList.add("vdemo-drawer-toggle-hidden");
+        drawerToggle.classList.add("vdemo-is-hidden");
         drawerToggle.style.pointerEvents = "none";
         drawerToggle.style.display = "none";
         drawer.setAttribute("aria-hidden", "false");
@@ -1001,11 +1001,11 @@ filterSelects.forEach(function (select) {
         drawer.classList.remove("vdemo-drawer-open");
         drawerToggle.classList.remove("vdemo-drawer-toggle-active");
         if (Object.keys(memoItems).length > 0) {
-            drawerToggle.classList.remove("vdemo-drawer-toggle-hidden");
+            drawerToggle.classList.remove("vdemo-is-hidden");
             drawerToggle.style.pointerEvents = "";
             drawerToggle.style.display = "inline-flex";
         } else {
-            drawerToggle.classList.add("vdemo-drawer-toggle-hidden");
+            drawerToggle.classList.add("vdemo-is-hidden");
             drawerToggle.style.pointerEvents = "none";
             drawerToggle.style.display = "none";
         }

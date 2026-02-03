@@ -2,6 +2,10 @@
    Voice Demo System – Frontend CSS
    ================================ */
 
+:root {
+    --vdemo-chat-launcher-offset: 84px;
+}
+
 .vdemo-wrapper {
     position: relative;
     max-width: 1200px;
@@ -414,43 +418,30 @@
 /* Demo Card */
 
 .vdemo-card {
-    background: #ffffff;
+    background: linear-gradient(#1a93ee, #1a93ee) top / 100% 3px no-repeat, #ffffff;
     border-radius: 16px;
     border: 1px solid rgba(15, 20, 26, 0.1);
     box-shadow: 0 8px 24px rgba(15, 20, 26, 0.06);
-    padding: 1.1rem 1.2rem 1rem 1.2rem;
+    padding: 0.95rem 1.05rem 0.9rem 1.05rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: relative;
     overflow: visible;
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
     transition:
-        box-shadow 0.28s ease,
-        border-color 0.28s ease,
-        background-color 0.28s ease,
-        opacity 0.26s ease,
-        transform 0.26s ease;
-}
-
-.vdemo-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #1a93ee 0%, #4fb2ff 100%);
-    border-radius: 16px 16px 0 0;
-    pointer-events: none;
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        opacity 0.2s ease;
 }
 
 .vdemo-card:hover {
-    box-shadow: 0 12px 28px rgba(15, 20, 26, 0.12);
-    border-color: rgba(15, 20, 26, 0.16);
+    box-shadow: 0 10px 24px rgba(15, 20, 26, 0.1), 0 0 0 3px rgba(26, 147, 238, 0.12);
+    border-color: rgba(26, 147, 238, 0.45);
     background-color: #ffffff;
-    transform: translateY(-2px);
+    transform: none;
 }
 
 
@@ -463,7 +454,7 @@
 .vdemo-card-inner {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.6rem;
 }
 
 .vdemo-card-header {
@@ -473,7 +464,7 @@
     background: transparent;
     color: #0f141a;
     border-radius: 12px;
-    padding: 0.75rem 0.9rem;
+    padding: 0.5rem 0.6rem;
     overflow: visible;
 }
 
@@ -488,7 +479,7 @@
 
 .vdemo-title {
     margin: 0;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     color: #0f141a;
     flex: 1;
@@ -503,7 +494,7 @@
 /* Badge mit Demo-ID */
 
 .vdemo-badge {
-    display: inline-flex;
+    display: none;
     align-items: center;
     justify-content: center;
     padding: 4px 8px;
@@ -532,13 +523,13 @@
 
 .vdemo-subline-info-badge {
     position: relative;
-    width: 30px;
-    height: 30px;
+    width: 22px;
+    height: 22px;
     border-radius: 999px;
-    border: 1px solid rgba(15, 20, 26, 0.12);
-    background: rgba(15, 20, 26, 0.06);
-    color: #0f141a;
-    font-size: 12px;
+    border: 1px solid rgba(26, 147, 238, 0.25);
+    background: rgba(26, 147, 238, 0.1);
+    color: #1a93ee;
+    font-size: 11px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -547,10 +538,11 @@
     outline: none;
     flex-shrink: 0;
     top: 1px;
+    margin-left: auto;
 }
 
 .vdemo-subline-info-badge:hover {
-    background: rgba(15, 20, 26, 0.1);
+    background: rgba(26, 147, 238, 0.16);
 }
 
 .vdemo-card-header .vdemo-badge {
@@ -560,20 +552,20 @@
 }
 
 .vdemo-card-header .vdemo-subline-info-badge {
-    background: rgba(15, 20, 26, 0.06);
-    border-color: rgba(15, 20, 26, 0.12);
-    color: #0f141a;
+    background: rgba(26, 147, 238, 0.1);
+    border-color: rgba(26, 147, 238, 0.25);
+    color: #1a93ee;
 }
 
 .vdemo-subline-info-badge::before {
     content: "i";
     font-weight: 700;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .vdemo-subline-info-badge-small {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 }
 
 /* Tooltip – helles Design */
@@ -765,7 +757,7 @@
 .vdemo-card-footer {
     display: flex;
     gap: 0.6rem;
-    margin-top: 0.9rem;
+    margin-top: 0.75rem;
     width: 100%;
 }
 
@@ -849,9 +841,10 @@
 .vdemo-pagination {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 1rem;
     margin-top: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .vdemo-pagination-pages {
@@ -864,7 +857,7 @@
     border: 1px solid transparent;
     background: transparent;
     color: #0f172a;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 0.4rem 0.6rem;
     cursor: pointer;
     font-size: 0.85rem;
@@ -879,8 +872,8 @@
 }
 
 .vdemo-page-link-active {
-    background: #0b5fb8;
-    border-color: #0b5fb8;
+    background: #1a93ee;
+    border-color: #1a93ee;
     color: #ffffff;
 }
 
@@ -925,8 +918,8 @@
 
 .vdemo-drawer-toggle {
     position: fixed;
-    right: auto;
-    left: 1.5rem;
+    right: calc(1.5rem + var(--vdemo-chat-launcher-offset));
+    left: auto;
     bottom: 1.5rem;
     background: #1a93ee;
     color: #ffffff;
@@ -954,8 +947,8 @@
 
 @media (max-width: 720px) {
     .vdemo-drawer-toggle {
-        left: 1rem;
-        bottom: 1.25rem;
+        right: calc(1rem + var(--vdemo-chat-launcher-offset));
+        bottom: 1rem;
     }
 }
 
@@ -1020,21 +1013,21 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    background: #ffffff;
-    color: #0f141a;
+    background: #0f141a;
+    color: #ffffff;
 }
 
 .vdemo-drawer-header h4 {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: #0f141a;
+    color: #ffffff;
 }
 
 .vdemo-drawer-close {
-    background: rgba(15, 20, 26, 0.06);
-    border: 1px solid rgba(15, 20, 26, 0.12);
-    color: #0f141a;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #ffffff;
     border-radius: 999px;
     width: 32px;
     height: 32px;
@@ -1048,8 +1041,8 @@
 }
 
 .vdemo-drawer-close:hover {
-    background: rgba(15, 20, 26, 0.1);
-    color: #0f141a;
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
 }
 
 .vdemo-drawer-close::before {
@@ -1078,15 +1071,16 @@
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #0f141a;
+    color: #1a93ee;
     margin-bottom: 0.5rem;
     font-weight: 700;
     background: #f6f8fb;
-    border: 1px solid rgba(15, 20, 26, 0.08);
+    border: 1px solid rgba(26, 147, 238, 0.15);
     border-radius: 12px;
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.75rem 0.5rem 0.7rem;
     width: 100%;
     box-sizing: border-box;
+    border-left: 2px solid rgba(26, 147, 238, 0.6);
 }
 
 .vdemo-drawer-group-items {
@@ -1141,27 +1135,28 @@
 }
 
 .vdemo-drawer-info-badge {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     border-radius: 999px;
-    border: 1px solid rgba(15, 20, 26, 0.12);
+    border: 1px solid rgba(26, 147, 238, 0.25);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
-    color: #0f141a;
+    font-size: 11px;
+    color: #1a93ee;
     position: relative;
-    background: rgba(15, 20, 26, 0.06);
+    background: rgba(26, 147, 238, 0.1);
     z-index: 2;
 }
 
 .vdemo-drawer-info-badge:hover {
-    background: rgba(15, 20, 26, 0.1);
+    background: rgba(26, 147, 238, 0.16);
 }
 
 .vdemo-drawer-info-badge::before {
     content: "i";
     font-weight: 700;
+    font-size: 11px;
 }
 
 .vdemo-drawer-info-tooltip {
@@ -1200,21 +1195,21 @@
 }
 
 .vdemo-drawer-item-remove {
-    border: 1px solid rgba(15, 20, 26, 0.12);
-    background: #ffffff;
-    color: #0f141a;
+    border: 1px solid rgba(214, 69, 69, 0.35);
+    background: rgba(214, 69, 69, 0.08);
+    color: #d64545;
     cursor: pointer;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 600;
-    padding: 0.2rem 0.5rem;
+    padding: 0.18rem 0.45rem;
     border-radius: 999px;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .vdemo-drawer-item-remove:hover {
-    background: rgba(15, 20, 26, 0.06);
-    border-color: rgba(15, 20, 26, 0.2);
-    color: #0f141a;
+    background: rgba(214, 69, 69, 0.14);
+    border-color: rgba(214, 69, 69, 0.5);
+    color: #c53838;
 }
 
 .vdemo-drawer-footer {
@@ -1291,12 +1286,12 @@
 }
 
 .vdemo-drawer-info-box {
-    background: #f6f8fb;
+    background: linear-gradient(135deg, rgba(26, 147, 238, 0.1), rgba(26, 147, 238, 0.03));
     border-radius: 14px;
     padding: 0.85rem;
     font-size: 0.75rem;
     color: #0f141a;
-    border: 1px solid rgba(15, 20, 26, 0.08);
+    border: 1px solid rgba(26, 147, 238, 0.18);
     box-shadow: none;
 }
 

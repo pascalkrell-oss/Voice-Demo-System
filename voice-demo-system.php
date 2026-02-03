@@ -744,7 +744,7 @@ public function enqueue_assets() {
                 <?php endforeach; ?>
             </div>
 
-            <button class="vdemo-drawer-toggle" id="vdemo-drawer-toggle" type="button">
+            <button class="vdemo-drawer-toggle vdemo-drawer-toggle-hidden" id="vdemo-drawer-toggle" type="button" style="display:none;">
                 <span class="vdemo-drawer-toggle-icon">
                     <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
                         <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14.5a.5.5 0 0 1-.79.407L12 15.5l-5.21 3.407A.5.5 0 0 1 6 18.5V4zm2 0h8v11.382l-4.21-2.75a1 1 0 0 0-1.08 0L8 15.382V4z" />
@@ -998,7 +998,7 @@ public function add_shortcode_column($columns) {
             return;
         }
 ?>
-        <button class="vdemo-drawer-toggle" id="vdemo-drawer-toggle" type="button">
+        <button class="vdemo-drawer-toggle vdemo-drawer-toggle-hidden" id="vdemo-drawer-toggle" type="button" style="display:none;">
                         <span class="vdemo-drawer-toggle-icon">
                             <svg viewBox="0 0 24 24" class="vdemo-icon-svg" aria-hidden="true" focusable="false">
                                 <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14.5a.5.5 0 0 1-.79.407L12 15.5l-5.21 3.407A.5.5 0 0 1 6 18.5V4zm2 0h8v11.382l-4.21-2.75a1 1 0 0 0-1.08 0L8 15.382V4z" />
